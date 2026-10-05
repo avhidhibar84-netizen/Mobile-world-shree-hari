@@ -1,25 +1,24 @@
 {
+  "name": "MobileWorld",
   "short_name": "MobileWorld",
-  "name": "Mobile World | Shree Hari",
-  "description": "Mobile World – Shree Hari | Latest smartphones, accessories & exclusive jewellery.",
+  "start_url": "/",
+  "id": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#000000",
+  "orientation": "portrait",
   "icons": [
     {
-      "src": "images/logo.png",
-      "type": "image/png",
+      "src": "https://via.placeholder.com/192.png",
       "sizes": "192x192",
+      "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "images/logo.png",
-      "type": "image/png",
+      "src": "https://via.placeholder.com/512.png",
       "sizes": "512x512",
+      "type": "image/png",
       "purpose": "any maskable"
     }
-  ],
-  "start_url": "/",
-  "background_color": "#f8fafc",
-  "theme_color": "#f8fafc",
-  "display": "standalone",
-  "orientation": "portrait",
-  "scope": "/"
+  ]
 }
