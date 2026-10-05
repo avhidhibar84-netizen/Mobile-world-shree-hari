@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <meta name="theme-color" content="#f8fafc" />
+  <meta name="theme-color" content="#fffdf7" />
   <meta name="description" content="Mobile World – Shree Hari | Latest smartphones, accessories & exclusive jewellery." />
   <title>Mobile World | Shree Hari</title>
 
@@ -17,13 +17,25 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 
   <script>
     tailwind.config = {
       theme: {
         extend: {
-          fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] }
+          fontFamily: { 
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            serif: ['Cinzel', 'Georgia', 'serif']
+          },
+          colors: {
+            festive: {
+              gold: '#D4AF37',
+              goldLight: '#F3E5AB',
+              crimson: '#800020',
+              crimsonLight: '#9B111E',
+              cream: '#FFFDF7'
+            }
+          }
         }
       }
     }
@@ -33,19 +45,21 @@
     * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
     html { scroll-behavior: smooth; }
     body {
-      background: linear-gradient(180deg, #f8fafc 0%, #eff6ff 100%);
-      color: #0f172a;
+      background: #FFFDF7;
+      background-image: radial-gradient(#D4AF37 0.4px, transparent 0.4px);
+      background-size: 24px 24px;
+      color: #2D1810;
       overflow-x: hidden;
       font-family: 'Inter', system-ui, sans-serif;
       min-height: 100vh;
       margin: 0;
     }
     ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: #f1f5f9; }
-    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+    ::-webkit-scrollbar-track { background: #FAF5E8; }
+    ::-webkit-scrollbar-thumb { background: #D4AF37; border-radius: 3px; }
 
     #splash {
-      position: fixed; inset: 0; z-index: 9999; background: #fff;
+      position: fixed; inset: 0; z-index: 9999; background: #FFFDF7;
       display: flex; align-items: center; justify-content: center;
       overflow: hidden; transition: opacity 0.6s ease-out;
     }
@@ -56,19 +70,21 @@
       #splash video {
         width: 100%; height: auto; max-width: 480px; max-height: 90vh;
         aspect-ratio: 9/16; object-fit: contain; border-radius: 12px;
-        box-shadow: 0 20px 60px rgba(0,0,0,0.12);
+        box-shadow: 0 20px 60px rgba(128, 0, 32, 0.15);
       }
     }
 
     .glass {
-      background: #fff; border: 1px solid #e2e8f0;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.03);
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      box-shadow: 0 4px 20px rgba(128, 0, 32, 0.05);
     }
 
     .slider-container {
       position: relative; width: 100%; overflow: hidden; border-radius: 1.25rem;
-      aspect-ratio: 4/5; max-height: 480px; background: #f1f5f9;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      aspect-ratio: 4/5; max-height: 480px; background: #FAF5E8;
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      box-shadow: 0 6px 24px rgba(128, 0, 32, 0.08);
     }
     @media (min-width: 640px) { .slider-container { aspect-ratio: 16/10; max-height: 420px; } }
     .slider-track {
@@ -82,7 +98,7 @@
     }
     .slider-overlay {
       position: absolute; inset: 0;
-      background: linear-gradient(to top, rgba(15,23,42,0.45) 0%, transparent 50%);
+      background: linear-gradient(to top, rgba(128, 0, 32, 0.5) 0%, transparent 50%);
       pointer-events: none;
     }
     .slider-dots {
@@ -90,32 +106,26 @@
       display: flex; gap: 0.4rem; z-index: 10;
     }
     .slider-dot {
-      width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,0.5);
+      width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,0.6);
       transition: all 0.3s ease; cursor: pointer;
     }
     .slider-dot.active {
-      background: #fff; width: 22px; border-radius: 4px;
-      box-shadow: 0 0 8px rgba(255,255,255,0.6);
+      background: #D4AF37; width: 22px; border-radius: 4px;
+      box-shadow: 0 0 8px rgba(212, 175, 55, 0.8);
     }
     .slider-nav {
       position: absolute; top: 50%; transform: translateY(-50%);
       width: 40px; height: 40px; border-radius: 50%;
-      background: rgba(255,255,255,0.9); border: 1px solid rgba(0,0,0,0.06);
+      background: rgba(255, 255, 255, 0.92); border: 1px solid rgba(212, 175, 55, 0.4);
       display: flex; align-items: center; justify-content: center;
-      color: #0f172a; z-index: 10; opacity: 0;
+      color: #800020; z-index: 10; opacity: 0;
       transition: opacity 0.3s, background 0.2s; cursor: pointer;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
     .slider-container:hover .slider-nav { opacity: 1; }
     .slider-prev { left: 0.75rem; }
     .slider-next { right: 0.75rem; }
 
-    .star { color: #fbbf24; font-size: 1.15rem; line-height: 1; }
-    .star-half { position: relative; display: inline-block; color: #e2e8f0; }
-    .star-half::before {
-      content: '★'; position: absolute; left: 0; top: 0; width: 50%;
-      overflow: hidden; color: #fbbf24;
-    }
     .section-enter {
       opacity: 0; transform: translateY(20px);
       transition: opacity 0.6s ease, transform 0.6s ease;
@@ -123,46 +133,40 @@
     .section-enter.visible { opacity: 1; transform: translateY(0); }
 
     .cat-btn {
-      padding: 0.4rem 0.9rem; border-radius: 9999px; font-size: 0.75rem;
-      font-weight: 600; background: #f1f5f9; color: #475569;
-      border: 1px solid transparent; transition: all 0.2s; white-space: nowrap;
+      padding: 0.45rem 1rem; border-radius: 9999px; font-size: 0.75rem;
+      font-weight: 600; background: #FAF5E8; color: #800020;
+      border: 1px solid rgba(212, 175, 55, 0.3); transition: all 0.2s; white-space: nowrap;
       cursor: pointer;
     }
-    .cat-btn.active { background: #2563eb; color: #fff; border-color: #2563eb; }
+    .cat-btn.active { 
+      background: linear-gradient(135deg, #800020 0%, #9B111E 100%); 
+      color: #FFFDF7; 
+      border-color: #D4AF37; 
+      box-shadow: 0 2px 8px rgba(128, 0, 32, 0.25);
+    }
 
     .product-card {
-      background: #fff; border: 1px solid #e2e8f0; border-radius: 1rem;
+      background: #FFFFFF; border: 1px solid rgba(212, 175, 55, 0.25); border-radius: 1rem;
       overflow: hidden; transition: transform 0.2s, box-shadow 0.2s; cursor: pointer;
     }
     .product-card:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+      box-shadow: 0 10px 25px rgba(128, 0, 32, 0.1);
+      border-color: #D4AF37;
     }
-
-    .social-row {
-      display: flex; flex-direction: row; gap: 15px;
-      align-items: center; justify-content: center; flex-wrap: wrap;
-    }
-    .social-icon-btn {
-      width: 52px; height: 52px; border-radius: 16px;
-      display: flex; align-items: center; justify-content: center;
-      transition: transform 0.2s, box-shadow 0.2s;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-    .social-icon-btn:hover { transform: translateY(-3px); }
 
     #cartBadge {
       position: absolute; top: -4px; right: -4px;
       min-width: 18px; height: 18px; border-radius: 9999px;
-      background: #ef4444; color: #fff; font-size: 10px; font-weight: 700;
+      background: #800020; color: #FFFDF7; font-size: 10px; font-weight: 700;
       display: flex; align-items: center; justify-content: center;
-      padding: 0 4px; line-height: 1;
+      padding: 0 4px; line-height: 1; border: 1px solid #D4AF37;
     }
     #cartBadge:empty, #cartBadge[data-count="0"] { display: none; }
 
     .overlay {
       position: fixed; inset: 0; z-index: 10000;
-      background: rgba(15,23,42,0.55); backdrop-filter: blur(4px);
+      background: rgba(45, 24, 16, 0.6); backdrop-filter: blur(4px);
       display: none; align-items: flex-end; justify-content: center;
     }
     @media (min-width: 640px) {
@@ -171,13 +175,14 @@
     .overlay.open { display: flex; }
 
     #detailModal .detail-panel {
-      background: #fff;
+      background: #FFFDF7;
       width: 100%;
       max-width: 480px;
       max-height: 92vh;
       overflow-y: auto;
       border-radius: 1.25rem 1.25rem 0 0;
       position: relative;
+      border: 1px solid rgba(212, 175, 55, 0.4);
       animation: slideUp 0.3s ease;
     }
     @media (min-width: 640px) {
@@ -193,27 +198,42 @@
 
     #cartDrawer {
       position: fixed; top: 0; right: 0; bottom: 0; width: min(360px, 100vw);
-      background: #fff; z-index: 10001;
+      background: #FFFDF7; z-index: 10001;
       transform: translateX(100%); transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
-      box-shadow: -8px 0 30px rgba(0,0,0,0.12);
+      box-shadow: -8px 0 30px rgba(0,0,0,0.15);
       display: flex; flex-direction: column;
+      border-left: 1px solid rgba(212, 175, 55, 0.3);
     }
     #cartDrawer.open { transform: translateX(0); }
     #cartOverlay {
       position: fixed; inset: 0; z-index: 10000;
-      background: rgba(15,23,42,0.4); display: none;
+      background: rgba(45, 24, 16, 0.5); display: none;
     }
     #cartOverlay.open { display: block; }
 
     .shop-warning {
-      background: #fef2f2;
-      border: 1px solid #fecaca;
-      color: #b91c1c;
+      background: #FFF5F5;
+      border: 1px solid #FCA5A5;
+      color: #991B1B;
       border-radius: 0.75rem;
       padding: 0.75rem 1rem;
       font-size: 0.75rem;
       line-height: 1.45;
       font-weight: 500;
+    }
+
+    .festive-border {
+      position: relative;
+    }
+    .festive-border::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 40px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #D4AF37, transparent);
     }
   </style>
 </head>
@@ -229,28 +249,33 @@
   <div id="main" class="opacity-0 transition-opacity duration-700">
 
     <!-- HEADER -->
-    <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200/80">
-      <div class="max-w-lg mx-auto px-4 py-3.5 flex items-center justify-between">
+    <header class="sticky top-0 z-50 bg-[#FFFDF7]/95 backdrop-blur-md border-b border-[#D4AF37]/30 shadow-sm">
+      <div class="max-w-lg mx-auto px-4 py-3 flex items-center justify-between">
         <div class="flex items-center gap-3">
-          <img src="images/logo.png" alt="Mobile World Logo" class="w-10 h-10 rounded-xl object-contain shadow-sm" onerror="this.style.display='none'" />
+          <img src="images/logo.png" alt="Mobile World Logo" class="w-10 h-10 rounded-xl object-contain shadow-sm border border-[#D4AF37]/30" onerror="this.style.display='none'" />
           <div>
-            <h1 class="text-base font-bold tracking-tight leading-none text-slate-900">Mobile World</h1>
-            <p class="text-[11px] text-slate-500 mt-0.5">Shree Hari</p>
+            <h1 class="font-serif text-base font-bold tracking-tight leading-none text-[#800020]">Mobile World</h1>
+            <p class="text-[11px] text-[#D4AF37] font-medium tracking-wide mt-0.5">Shree Hari · Festival Edition</p>
           </div>
         </div>
-        <button id="cartBtn" class="relative p-2 rounded-xl hover:bg-slate-100 transition" aria-label="Pre-order bucket">
+        <button id="cartBtn" class="relative p-2 rounded-xl hover:bg-[#FAF5E8] transition border border-[#D4AF37]/20" aria-label="Pre-order bucket">
           <span style="font-size:22px;line-height:1;">🛍️</span>
           <span id="cartBadge" data-count="0">0</span>
         </button>
       </div>
     </header>
 
+    <!-- FESTIVE BANNER -->
+    <div class="bg-gradient-to-r from-[#800020] via-[#9B111E] to-[#800020] text-[#FFFDF7] py-2 px-4 text-center text-xs font-medium border-b border-[#D4AF37]">
+      <span class="text-[#D4AF37]">✨</span> Celebrating Festive Traditions with Exclusive Collections <span class="text-[#D4AF37]">✨</span>
+    </div>
+
     <!-- HAPPY CUSTOMERS -->
     <section class="max-w-lg mx-auto px-4 pt-5 pb-2">
       <div class="section-enter">
-        <div class="mb-3">
-          <h2 class="text-lg font-bold tracking-tight text-slate-900">Happy Customers</h2>
-          <p class="text-xs text-slate-500 mt-0.5">Real moments from Mobile World</p>
+        <div class="mb-3 text-center festive-border pb-1">
+          <h2 class="font-serif text-lg font-bold tracking-tight text-[#800020]">Festive Moments</h2>
+          <p class="text-xs text-[#800020]/70 mt-0.5">Happy customer celebrations at Mobile World</p>
         </div>
         <div class="slider-container" id="slider">
           <div class="slider-track" id="sliderTrack"></div>
@@ -268,15 +293,15 @@
     <!-- SHREE HARI PRODUCTS -->
     <section class="max-w-lg mx-auto px-4 pt-6 pb-4">
       <div class="section-enter">
-        <div class="mb-4">
-          <h2 class="text-lg font-bold tracking-tight text-slate-900">Shree Hari Collection</h2>
-          <p class="text-xs text-slate-500 mt-0.5">Exclusive jewellery & accessories · Tap to view details</p>
+        <div class="mb-4 text-center festive-border pb-1">
+          <h2 class="font-serif text-lg font-bold tracking-tight text-[#800020]">Shree Hari Collection</h2>
+          <p class="text-xs text-[#800020]/70 mt-0.5">Exclusive festive jewellery & accessories · Tap to view details</p>
         </div>
 
         <div class="relative mb-3">
-          <svg class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <input id="productSearch" type="search" placeholder="Search products..."
-                 class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 bg-white text-sm focus:border-blue-500 focus:outline-none" />
+          <svg class="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#D4AF37]" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input id="productSearch" type="search" placeholder="Search festive collections..."
+                 class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-[#D4AF37]/40 bg-[#FFFFFF] text-sm focus:border-[#800020] focus:outline-none placeholder-[#800020]/40" />
         </div>
 
         <div id="categoryFilters" class="flex gap-2 overflow-x-auto pb-2 mb-4">
@@ -292,87 +317,51 @@
         <div id="productsGrid" class="grid grid-cols-2 gap-3"></div>
 
         <div class="text-center mt-5">
-          <p id="productsLoading" class="text-sm text-slate-400 hidden">Loading products...</p>
-          <p id="productsEnd" class="text-sm text-slate-400 hidden">You've seen all products</p>
-          <button id="loadMoreBtn" class="hidden px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold transition">Load More</button>
+          <p id="productsLoading" class="text-sm text-[#800020]/50 hidden">Loading products...</p>
+          <p id="productsEnd" class="text-sm text-[#800020]/50 hidden">You've seen all products</p>
+          <button id="loadMoreBtn" class="hidden px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#800020] to-[#9B111E] text-[#FFFDF7] text-sm font-semibold transition border border-[#D4AF37] shadow-md hover:opacity-95">Load More</button>
         </div>
       </div>
     </section>
 
     <!-- TAGLINE -->
     <section class="max-w-lg mx-auto px-4 py-5">
-      <div class="section-enter text-center">
-        <p class="text-sm text-slate-600 leading-relaxed">
-          Your one-stop destination for the latest smartphones,<br class="hidden sm:block"/>
-          genuine accessories & expert service.
+      <div class="section-enter text-center bg-[#FAF5E8] p-4 rounded-2xl border border-[#D4AF37]/30">
+        <p class="text-sm text-[#800020] leading-relaxed font-medium">
+          Your trusted destination for smartphones,<br class="hidden sm:block"/>
+          genuine accessories & traditional jewellery.
         </p>
       </div>
     </section>
 
-    <!-- SOCIAL ICONS -->
-    <section class="max-w-lg mx-auto px-4 pb-6">
+    <!-- CONTACT US (MINIMAL WHATSAPP-ONLY) -->
+    <section class="max-w-lg mx-auto px-4 pb-8">
       <div class="section-enter">
-        <h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-4 text-center">Connect with us</h2>
-        <div class="social-row">
-          <a href="https://www.instagram.com/mobile_world_shree_hari?stkn=YmV4MTdjcGJpN3Jh"
-             target="_blank" rel="noopener noreferrer"
-             class="social-icon-btn" style="background:linear-gradient(135deg,#f58529,#dd2a7b,#8134af);" title="Instagram">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
-              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
-              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
-            </svg>
-          </a>
-          <a href="https://www.facebook.com/share/1FJ4jTDSHb/"
-             target="_blank" rel="noopener noreferrer"
-             class="social-icon-btn" style="background:#1877f2;" title="Facebook">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="white">
-              <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-            </svg>
-          </a>
+        <div class="glass rounded-2xl p-6 text-center border border-[#D4AF37]/40">
+          <h2 class="font-serif text-base font-bold text-[#800020] uppercase tracking-wider mb-2">Contact Us</h2>
+          <p class="text-xs text-[#800020]/70 mb-5">Have questions or want to place an inquiry directly? Connect with us on WhatsApp.</p>
+          
           <a href="https://wa.me/message/Z3E4IHACSIJYH1"
              target="_blank" rel="noopener noreferrer"
-             class="social-icon-btn" style="background:#25d366;" title="WhatsApp"
+             class="inline-flex items-center justify-center gap-3 px-6 py-3.5 rounded-xl bg-[#25D366] hover:bg-[#20ba5a] text-white text-sm font-bold transition-all shadow-md active:scale-95 w-full sm:w-auto"
              onclick="window.open(this.href,'_blank','noopener,noreferrer'); return false;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="white">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="white">
               <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.435 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
             </svg>
+            Chat with us on WhatsApp
           </a>
         </div>
       </div>
     </section>
 
-    <!-- GOOGLE + TRUST -->
+    <!-- TRUST STATS -->
     <section class="max-w-lg mx-auto px-4 pb-8">
       <div class="section-enter">
-        <div class="glass rounded-2xl p-5 mb-3 text-center">
-          <div class="flex items-center justify-center gap-1.5 mb-2">
-            <svg width="18" height="18" viewBox="0 0 24 24">
-              <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-              <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-              <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
-              <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-            </svg>
-            <span class="text-xs font-medium text-slate-500">Google Reviews</span>
-          </div>
-          <div class="flex items-center justify-center gap-0.5 mb-1.5">
-            <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star-half">★</span>
-          </div>
-          <p class="text-[15px] font-bold text-slate-900 mb-3">
-            4.8 <span class="font-normal text-slate-500">·</span> 1,000+ Happy Customers
-          </p>
-          <a href="https://local.google.com/place?placeid=ChIJnU0tDLYT9zkRp07XPjGZfdE&utm_medium=noren&utm_source=gbp&utm_campaign=2026"
-             target="_blank" rel="noopener noreferrer"
-             class="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold transition shadow-md shadow-blue-500/20">
-            Write a Review
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-          </a>
-        </div>
-        <div class="glass rounded-2xl p-4">
+        <div class="glass rounded-2xl p-4 border border-[#D4AF37]/30">
           <div class="grid grid-cols-3 gap-3 text-center">
-            <div><p class="text-lg font-bold text-blue-600">100%</p><p class="text-[11px] text-slate-500 mt-0.5">Genuine</p></div>
-            <div class="border-x border-slate-200"><p class="text-lg font-bold text-blue-600">Fast</p><p class="text-[11px] text-slate-500 mt-0.5">Service</p></div>
-            <div><p class="text-lg font-bold text-blue-600">Trusted</p><p class="text-[11px] text-slate-500 mt-0.5">Local Shop</p></div>
+            <div><p class="text-lg font-bold text-[#800020]">100%</p><p class="text-[11px] text-[#800020]/70 mt-0.5">Genuine</p></div>
+            <div class="border-x border-[#D4AF37]/30"><p class="text-lg font-bold text-[#800020]">Fast</p><p class="text-[11px] text-[#800020]/70 mt-0.5">Service</p></div>
+            <div><p class="text-lg font-bold text-[#800020]">Trusted</p><p class="text-[11px] text-[#800020]/70 mt-0.5">Local Shop</p></div>
           </div>
         </div>
       </div>
@@ -380,14 +369,14 @@
 
     <!-- TWO-COLUMN FOOTER -->
     <footer class="max-w-lg mx-auto px-4 pb-8">
-      <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 text-xs text-slate-400 border-t border-slate-200 pt-5">
+      <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 text-xs text-[#800020]/60 border-t border-[#D4AF37]/30 pt-5">
         <div>
           <p>© <span id="year"></span> Mobile World · Shree Hari</p>
           <p class="mt-0.5 text-[11px]">Crafted for the best mobile experience</p>
         </div>
         <div class="sm:text-right">
-          <p><span class="text-slate-500">Admin:</span> <span class="font-semibold text-slate-600">JEET DHIBAR</span></p>
-          <p class="mt-0.5"><span class="text-slate-500">Developer:</span> <span class="font-semibold text-slate-600">AVHISHEK DHIBAR</span></p>
+          <p><span class="text-[#800020]/50">Admin:</span> <span class="font-semibold text-[#800020]">JEET DHIBAR</span></p>
+          <p class="mt-0.5"><span class="text-[#800020]/50">Developer:</span> <span class="font-semibold text-[#800020]">AVHISHEK DHIBAR</span></p>
         </div>
       </div>
     </footer>
@@ -396,22 +385,22 @@
   <!-- PRODUCT DETAIL MODAL -->
   <div id="detailModal" class="overlay">
     <div class="detail-panel">
-      <button id="closeDetail" class="absolute top-3 right-3 z-10 w-9 h-9 rounded-full bg-white/90 shadow flex items-center justify-center text-slate-700 hover:bg-white transition text-lg leading-none">
+      <button id="closeDetail" class="absolute top-3 right-3 z-10 w-9 h-9 rounded-full bg-white/90 shadow flex items-center justify-center text-[#800020] hover:bg-white transition text-lg leading-none border border-[#D4AF37]/30">
         &times;
       </button>
 
-      <div class="aspect-square bg-slate-100 w-full">
+      <div class="aspect-square bg-[#FAF5E8] w-full">
         <img id="detailImg" src="" alt="" class="w-full h-full object-cover" />
       </div>
 
       <div class="p-5 pb-6">
-        <span id="detailCat" class="text-[11px] font-semibold uppercase tracking-wide text-blue-600 bg-blue-50 px-2 py-0.5 rounded"></span>
-        <h2 id="detailTitle" class="text-lg font-bold text-slate-900 mt-2 leading-snug"></h2>
-        <div id="detailPrice" class="mt-2 text-xl font-bold text-blue-600"></div>
-        <p id="detailDesc" class="text-sm text-slate-500 mt-3 leading-relaxed"></p>
+        <span id="detailCat" class="text-[11px] font-semibold uppercase tracking-wide text-[#800020] bg-[#FAF5E8] px-2 py-0.5 rounded border border-[#D4AF37]/30"></span>
+        <h2 id="detailTitle" class="font-serif text-lg font-bold text-[#800020] mt-2 leading-snug"></h2>
+        <div id="detailPrice" class="mt-2 text-xl font-bold text-[#800020]"></div>
+        <p id="detailDesc" class="text-sm text-[#800020]/70 mt-3 leading-relaxed"></p>
 
         <button id="detailPreOrderBtn"
-                class="mt-5 w-full py-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold transition active:scale-[0.98] shadow-lg">
+                class="mt-5 w-full py-3.5 rounded-xl bg-gradient-to-r from-[#800020] to-[#9B111E] text-[#FFFDF7] text-sm font-semibold transition active:scale-[0.98] shadow-lg border border-[#D4AF37]">
           Pre-Order Now
         </button>
       </div>
@@ -420,10 +409,10 @@
 
   <!-- PRE-ORDER FORM MODAL -->
   <div id="preOrderModal" class="overlay" style="align-items:center;padding:1rem;">
-    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6 relative">
-      <button id="closeModal" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-xl leading-none">&times;</button>
-      <h3 class="text-lg font-bold text-slate-900 mb-1">Pre-Order Now</h3>
-      <p id="modalProductName" class="text-sm text-slate-500 mb-3 truncate"></p>
+    <div class="bg-[#FFFDF7] rounded-2xl shadow-2xl w-full max-w-sm p-6 relative border border-[#D4AF37]/40">
+      <button id="closeModal" class="absolute top-4 right-4 text-[#800020]/50 hover:text-[#800020] text-xl leading-none">&times;</button>
+      <h3 class="font-serif text-lg font-bold text-[#800020] mb-1">Pre-Order Now</h3>
+      <p id="modalProductName" class="text-sm text-[#800020]/70 mb-3 truncate"></p>
 
       <div class="shop-warning mb-4">
         Note: Pre-orders must be collected in-person from our physical shop.
@@ -431,34 +420,34 @@
 
       <form id="preOrderForm" class="space-y-4">
         <div>
-          <label class="block text-xs font-medium text-slate-600 mb-1">Your Name *</label>
+          <label class="block text-xs font-medium text-[#800020] mb-1">Your Name *</label>
           <input type="text" id="poName" required minlength="3" placeholder="Enter full name"
-                 class="w-full px-3 py-2.5 rounded-xl border border-slate-200 text-sm focus:border-blue-500 focus:outline-none" />
+                 class="w-full px-3 py-2.5 rounded-xl border border-[#D4AF37]/40 bg-white text-sm focus:border-[#800020] focus:outline-none" />
         </div>
         <div>
-          <label class="block text-xs font-medium text-slate-600 mb-1">Mobile Number *</label>
+          <label class="block text-xs font-medium text-[#800020] mb-1">Mobile Number *</label>
           <input type="tel" id="poPhone" required pattern="[6-9][0-9]{9}" maxlength="10" placeholder="10-digit mobile number"
-                 class="w-full px-3 py-2.5 rounded-xl border border-slate-200 text-sm focus:border-blue-500 focus:outline-none" />
+                 class="w-full px-3 py-2.5 rounded-xl border border-[#D4AF37]/40 bg-white text-sm focus:border-[#800020] focus:outline-none" />
         </div>
         <div class="cf-turnstile" data-sitekey="YOUR_TURNSTILE_SITE_KEY" data-theme="light"></div>
         <button type="submit" id="poSubmitBtn"
-                class="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold transition active:scale-[0.98]">
+                class="w-full py-3 rounded-xl bg-gradient-to-r from-[#800020] to-[#9B111E] text-[#FFFDF7] font-semibold transition active:scale-[0.98] border border-[#D4AF37] shadow-md">
           Confirm Pre-Order
         </button>
       </form>
-      <p id="poError" class="text-red-500 text-xs mt-3 hidden text-center"></p>
+      <p id="poError" class="text-red-600 text-xs mt-3 hidden text-center font-medium"></p>
     </div>
   </div>
 
   <!-- CART DRAWER -->
   <div id="cartOverlay"></div>
   <div id="cartDrawer">
-    <div class="flex items-center justify-between px-4 py-4 border-b border-slate-100">
-      <h3 class="font-bold text-slate-900">My Pre-Orders</h3>
-      <button id="closeCart" class="text-slate-400 hover:text-slate-600 text-xl leading-none">&times;</button>
+    <div class="flex items-center justify-between px-4 py-4 border-b border-[#D4AF37]/30 bg-[#FAF5E8]">
+      <h3 class="font-serif font-bold text-[#800020]">My Pre-Orders</h3>
+      <button id="closeCart" class="text-[#800020]/50 hover:text-[#800020] text-xl leading-none">&times;</button>
     </div>
     <div id="cartList" class="flex-1 overflow-y-auto p-4 space-y-3"></div>
-    <div id="cartEmpty" class="flex-1 flex items-center justify-center text-sm text-slate-400 p-6 text-center hidden">
+    <div id="cartEmpty" class="flex-1 flex items-center justify-center text-sm text-[#800020]/50 p-6 text-center hidden">
       No pre-orders yet.<br/>Browse products and place one!
     </div>
   </div>
@@ -653,7 +642,7 @@
         if (!data || data.length === 0) {
           hasMoreProducts = false;
           if (currentPage === 0) {
-            productsGrid.innerHTML = '<p class="col-span-2 text-center text-sm text-slate-400 py-10">No products found</p>';
+            productsGrid.innerHTML = '<p class="col-span-2 text-center text-sm text-[#800020]/60 py-10">No products found</p>';
           } else {
             productsEnd.classList.remove('hidden');
           }
@@ -684,19 +673,19 @@
         const hasDiscount = p.discount_price && Number(p.discount_price) < Number(p.price);
         return `
           <div class="product-card" data-id="${p.id}" id="product-card-${p.id}">
-            <div class="aspect-square bg-slate-100 overflow-hidden">
+            <div class="aspect-square bg-[#FAF5E8] overflow-hidden">
               <img src="${p.image_url || ''}" alt="${p.name || ''}"
                    loading="lazy" decoding="async"
                    class="w-full h-full object-cover"
                    onerror="this.style.opacity='0.3'" />
             </div>
             <div class="p-3">
-              <h3 class="text-sm font-semibold text-slate-900 line-clamp-2 leading-snug">${p.name || ''}</h3>
+              <h3 class="text-sm font-semibold text-[#800020] line-clamp-2 leading-snug">${p.name || ''}</h3>
               <div class="mt-1.5 flex items-baseline gap-1.5">
                 ${hasDiscount
-                  ? `<span class="text-sm font-bold text-blue-600">₹${p.discount_price}</span>
-                     <span class="text-xs text-slate-400 line-through">₹${p.price}</span>`
-                  : `<span class="text-sm font-bold text-blue-600">₹${p.price}</span>`
+                  ? `<span class="text-sm font-bold text-[#800020]">₹${p.discount_price}</span>
+                     <span class="text-xs text-[#800020]/40 line-through">₹${p.price}</span>`
+                  : `<span class="text-sm font-bold text-[#800020]">₹${p.price}</span>`
                 }
               </div>
             </div>
@@ -766,7 +755,7 @@
       document.getElementById('detailDesc').textContent = p.description || 'No description available.';
       const hasDiscount = p.discount_price && Number(p.discount_price) < Number(p.price);
       document.getElementById('detailPrice').innerHTML = hasDiscount
-        ? `₹${p.discount_price} <span class="text-slate-400 line-through font-normal text-base ml-1">₹${p.price}</span>`
+        ? `₹${p.discount_price} <span class="text-[#800020]/40 line-through font-normal text-base ml-1">₹${p.price}</span>`
         : `₹${p.price}`;
 
       detailModal.classList.add('open');
@@ -938,12 +927,12 @@
       }
       empty.classList.add('hidden');
       list.innerHTML = cart.map(item => `
-        <div class="flex gap-3 items-center p-3 rounded-xl border border-slate-100 bg-slate-50">
-          <img src="${item.image}" class="w-12 h-12 rounded-lg object-cover bg-white border" onerror="this.style.opacity='0.3'" />
+        <div class="flex gap-3 items-center p-3 rounded-xl border border-[#D4AF37]/30 bg-[#FFFDF7]">
+          <img src="${item.image}" class="w-12 h-12 rounded-lg object-cover bg-white border border-[#D4AF37]/20" onerror="this.style.opacity='0.3'" />
           <div class="flex-1 min-w-0">
-            <p class="text-sm font-semibold text-slate-900 truncate">${item.name}</p>
-            <p class="text-xs text-blue-600 font-medium mt-0.5">${item.price ? '₹' + item.price : ''}</p>
-            <p class="text-xs font-bold text-red-600 mt-1">Please visit our shop to collect</p>
+            <p class="text-sm font-semibold text-[#800020] truncate">${item.name}</p>
+            <p class="text-xs text-[#800020] font-medium mt-0.5">${item.price ? '₹' + item.price : ''}</p>
+            <p class="text-xs font-bold text-red-700 mt-1">Please visit our shop to collect</p>
           </div>
         </div>
       `).join('');
