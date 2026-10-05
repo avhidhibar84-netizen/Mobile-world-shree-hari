@@ -1,21 +1,20 @@
 {
-  "name": "MobileWorld",
-  "short_name": "MobileWorld",
+  "name": "My Progressive Web App",
+  "short_name": "MyPWA",
+  "description": "A fully responsive, installable Progressive Web App designed for seamless offline and online performance.",
   "start_url": "/",
-  "id": "/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#000000",
-  "orientation": "portrait",
   "icons": [
     {
-      "src": "https://via.placeholder.com/192.png",
+      "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAMAAABlAp31AAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAACpJREFUeJ3twQENAAAAwqD3T20PBxAAAAAAAAAAAAAAAAAAAAAAAAAAAHwGq2AAAO3L9AIAAAAASUVORK5CYII=",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "https://via.placeholder.com/512.png",
+      "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAgAAAAICAMAAACA3vA3AAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAD1JREFUeJ3twTEBAAAACIPwv/R2CgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD4Gq2AAAX241B4AAAAASUVORK5CYII=",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
