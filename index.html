@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#f8fafc" />
+  <meta name="description" content="Mobile World – Shree Hari | Latest smartphones, accessories & exclusive jewellery." />
+  <title>Mobile World | Shree Hari</title>
+
+  <script>window.onerror = function(msg) { if (typeof msg === 'string' && msg.includes('Script error')) return true; };</script>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: linear-gradient(180deg, #f8fafc 0%, #eff6ff 100%);
+      color: #0f172a;
+      overflow-x: hidden;
+      font-family: 'Inter', system-ui, sans-serif;
+      min-height: 100vh;
+      margin: 0;
+    }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #f1f5f9; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+
+    #splash {
+      position: fixed; inset: 0; z-index: 9999; background: #fff;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden; transition: opacity 0.6s ease-out;
+    }
+    #splash.hidden { opacity: 0; pointer-events: none; }
+    #splash.removed { display: none; }
+    #splash video { width: 100%; height: 100%; object-fit: contain; display: block; }
+    @media (min-width: 769px) {
+      #splash video {
+        width: 100%; height: auto; max-width: 480px; max-height: 90vh;
+        aspect-ratio: 9/16; object-fit: contain; border-radius: 12px;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.12);
+      }
+    }
+
+    .glass {
+      background: #fff; border: 1px solid #e2e8f0;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.03);
+    }
+
+    .slider-container {
+      position: relative; width: 100%; overflow: hidden; border-radius: 1.25rem;
+      aspect-ratio: 4/5; max-height: 480px; background: #f1f5f9;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+    @media (min-width: 640px) { .slider-container { aspect-ratio: 16/10; max-height: 420px; } }
+    .slider-track {
+      display: flex; height: 100%;
+      transition: transform 0.55s cubic-bezier(0.25,1,0.5,1); will-change: transform;
+    }
+    .slider-slide { min-width: 100%; height: 100%; position: relative; }
+    .slider-slide img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      user-select: none; -webkit-user-drag: none;
+    }
+    .slider-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(15,23,42,0.45) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    .slider-dots {
+      position: absolute; bottom: 1rem; left: 50%; transform: translateX(-50%);
+      display: flex; gap: 0.4rem; z-index: 10;
+    }
+    .slider-dot {
+      width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,0.5);
+      transition: all 0.3s ease; cursor: pointer;
+    }
+    .slider-dot.active {
+      background: #fff; width: 22px; border-radius: 4px;
+      box-shadow: 0 0 8px rgba(255,255,255,0.6);
+    }
+    .slider-nav {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      width: 40px; height: 40px; border-radius: 50%;
+      background: rgba(255,255,255,0.9); border: 1px solid rgba(0,0,0,0.06);
+      display: flex; align-items: center; justify-content: center;
+      color: #0f172a; z-index: 10; opacity: 0;
+      transition: opacity 0.3s, background 0.2s; cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .slider-container:hover .slider-nav { opacity: 1; }
+    .slider-prev { left: 0.75rem; }
+    .slider-next { right: 0.75rem; }
+
+    .star { color: #fbbf24; font-size: 1.15rem; line-height: 1; }
+    .star-half { position: relative; display: inline-block; color: #e2e8f0; }
+    .star-half::before {
+      content: '★'; position: absolute; left: 0; top: 0; width: 50%;
+      overflow: hidden; color: #fbbf24;
+    }
+    .section-enter {
+      opacity: 0; transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .section-enter.visible { opacity: 1; transform: translateY(0); }
+
+    .cat-btn {
+      padding: 0.4rem 0.9rem; border-radius: 9999px; font-size: 0.75rem;
+      font-weight: 600; background: #f1f5f9; color: #475569;
+      border: 1px solid transparent; transition: all 0.2s; white-space: nowrap;
+      cursor: pointer;
+    }
+    .cat-btn.active { background: #2563eb; color: #fff; border-color: #2563eb; }
+
+    .product-card {
+      background: #fff; border: 1px solid #e2e8f0; border-radius: 1rem;
+      overflow: hidden; transition: transform 0.2s, box-shadow 0.2s; cursor: pointer;
+    }
+    .product-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    }
+
+    .social-row {
+      display: flex; flex-direction: row; gap: 15px;
+      align-items: center; justify-content: center; flex-wrap: wrap;
+    }
+    .social-icon-btn {
+      width: 52px; height: 52px; border-radius: 16px;
+      display: flex; align-items: center; justify-content: center;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .social-icon-btn:hover { transform: translateY(-3px); }
+
+    #cartBadge {
+      position: absolute; top: -4px; right: -4px;
+      min-width: 18px; height: 18px; border-radius: 9999px;
+      background: #ef4444; color: #fff; font-size: 10px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      padding: 0 4px; line-height: 1;
+    }
+    #cartBadge:empty, #cartBadge[data-count="0"] { display: none; }
+
+    .overlay {
+      position: fixed; inset: 0; z-index: 10000;
+      background: rgba(15,23,42,0.55); backdrop-filter: blur(4px);
+      display: none; align-items: flex-end; justify-content: center;
+    }
+    @media (min-width: 640px) {
+      .overlay { align-items: center; padding: 1rem; }
+    }
+    .overlay.open { display: flex; }
+
+    #detailModal .detail-panel {
+      background: #fff;
+      width: 100%;
+      max-width: 480px;
+      max-height: 92vh;
+      overflow-y: auto;
+      border-radius: 1.25rem 1.25rem 0 0;
+      position: relative;
+      animation: slideUp 0.3s ease;
+    }
+    @media (min-width: 640px) {
+      #detailModal .detail-panel {
+        border-radius: 1.25rem;
+        max-height: 90vh;
+      }
+    }
+    @keyframes slideUp {
+      from { transform: translateY(40px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    #cartDrawer {
+      position: fixed; top: 0; right: 0; bottom: 0; width: min(360px, 100vw);
+      background: #fff; z-index: 10001;
+      transform: translateX(100%); transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+      box-shadow: -8px 0 30px rgba(0,0,0,0.12);
+      display: flex; flex-direction: column;
+    }
+    #cartDrawer.open { transform: translateX(0); }
+    #cartOverlay {
+      position: fixed; inset: 0; z-index: 10000;
+      background: rgba(15,23,42,0.4); display: none;
+    }
+    #cartOverlay.open { display: block; }
+
+    .shop-warning {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      color: #b91c1c;
+      border-radius: 0.75rem;
+      padding: 0.75rem 1rem;
+      font-size: 0.75rem;
+      line-height: 1.45;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body class="min-h-screen antialiased">
+
+  <!-- VIDEO SPLASH -->
+  <div id="splash">
+    <video id="splashVideo" autoplay muted playsinline preload="auto">
+      <source src="images/intro.mp4" type="video/mp4">
+    </video>
+  </div>
+
+  <div id="main" class="opacity-0 transition-opacity duration-700">
+
+    <!-- HEADER -->
+    <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200/80">
+      <div class="max-w-lg mx-auto px-4 py-3.5 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <img src="images/logo.png" alt="Mobile World Logo" class="w-10 h-10 rounded-xl object-contain shadow-sm" onerror="this.style.display='none'" />
+          <div>
+            <h1 class="text-base font-bold tracking-tight leading-none text-slate-900">Mobile World</h1>
+            <p class="text-[11px] text-slate-500 mt-0.5">Shree Hari</p>
+          </div>
+        </div>
+        <button id="cartBtn" class="relative p-2 rounded-xl hover:bg-slate-100 transition" aria-label="Pre-order bucket">
+          <span style="font-size:22px;line-height:1;">🛍️</span>
+          <span id="cartBadge" data-count="0">0</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- HAPPY CUSTOMERS -->
+    <section class="max-w-lg mx-auto px-4 pt-5 pb-2">
+      <div class="section-enter">
+        <div class="mb-3">
+          <h2 class="text-lg font-bold tracking-tight text-slate-900">Happy Customers</h2>
+          <p class="text-xs text-slate-500 mt-0.5">Real moments from Mobile World</p>
+        </div>
+        <div class="slider-container" id="slider">
+          <div class="slider-track" id="sliderTrack"></div>
+          <button class="slider-nav slider-prev" id="prevBtn" aria-label="Previous">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <button class="slider-nav slider-next" id="nextBtn" aria-label="Next">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+          <div class="slider-dots" id="sliderDots"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SHREE HARI PRODUCTS -->
+    <section class="max-w-lg mx-auto px-4 pt-6 pb-4">
+      <div class="section-enter">
+        <div class="mb-4">
+          <h2 class="text-lg font-bold tracking-tight text-slate-900">Shree Hari Collection</h2>
+          <p class="text-xs text-slate-500 mt-0.5">Exclusive jewellery & accessories · Tap to view details</p>
+        </div>
+
+        <div class="relative mb-3">
+          <svg class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input id="productSearch" type="search" placeholder="Search products..."
+                 class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 bg-white text-sm focus:border-blue-500 focus:outline-none" />
+        </div>
+
+        <div id="categoryFilters" class="flex gap-2 overflow-x-auto pb-2 mb-4">
+          <button class="cat-btn active" data-cat="all">All</button>
+          <button class="cat-btn" data-cat="rings">Rings</button>
+          <button class="cat-btn" data-cat="necklaces">Necklaces</button>
+          <button class="cat-btn" data-cat="earrings">Earrings</button>
+          <button class="cat-btn" data-cat="bangles">Bangles</button>
+          <button class="cat-btn" data-cat="mobile_accessories">Mobile Accessories</button>
+          <button class="cat-btn" data-cat="others">Others</button>
+        </div>
+
+        <div id="productsGrid" class="grid grid-cols-2 gap-3"></div>
+
+        <div class="text-center mt-5">
+          <p id="productsLoading" class="text-sm text-slate-400 hidden">Loading products...</p>
+          <p id="productsEnd" class="text-sm text-slate-400 hidden">You've seen all products</p>
+          <button id="loadMoreBtn" class="hidden px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold transition">Load More</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAGLINE -->
+    <section class="max-w-lg mx-auto px-4 py-5">
+      <div class="section-enter text-center">
+        <p class="text-sm text-slate-600 leading-relaxed">
+          Your one-stop destination for the latest smartphones,<br class="hidden sm:block"/>
+          genuine accessories & expert service.
+        </p>
+      </div>
+    </section>
+
+    <!-- SOCIAL ICONS -->
+    <section class="max-w-lg mx-auto px-4 pb-6">
+      <div class="section-enter">
+        <h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-4 text-center">Connect with us</h2>
+        <div class="social-row">
+          <a href="https://www.instagram.com/mobile_world_shree_hari?stkn=YmV4MTdjcGJpN3Jh"
+             target="_blank" rel="noopener noreferrer"
+             class="social-icon-btn" style="background:linear-gradient(135deg,#f58529,#dd2a7b,#8134af);" title="Instagram">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+            </svg>
+          </a>
+          <a href="https://www.facebook.com/share/1FJ4jTDSHb/"
+             target="_blank" rel="noopener noreferrer"
+             class="social-icon-btn" style="background:#1877f2;" title="Facebook">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="white">
+              <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+            </svg>
+          </a>
+          <a href="https://wa.me/message/Z3E4IHACSIJYH1"
+             target="_blank" rel="noopener noreferrer"
+             class="social-icon-btn" style="background:#25d366;" title="WhatsApp"
+             onclick="window.open(this.href,'_blank','noopener,noreferrer'); return false;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="white">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.435 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- GOOGLE + TRUST -->
+    <section class="max-w-lg mx-auto px-4 pb-8">
+      <div class="section-enter">
+        <div class="glass rounded-2xl p-5 mb-3 text-center">
+          <div class="flex items-center justify-center gap-1.5 mb-2">
+            <svg width="18" height="18" viewBox="0 0 24 24">
+              <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+              <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+              <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+              <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+            </svg>
+            <span class="text-xs font-medium text-slate-500">Google Reviews</span>
+          </div>
+          <div class="flex items-center justify-center gap-0.5 mb-1.5">
+            <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star-half">★</span>
+          </div>
+          <p class="text-[15px] font-bold text-slate-900 mb-3">
+            4.8 <span class="font-normal text-slate-500">·</span> 1,000+ Happy Customers
+          </p>
+          <a href="https://local.google.com/place?placeid=ChIJnU0tDLYT9zkRp07XPjGZfdE&utm_medium=noren&utm_source=gbp&utm_campaign=2026"
+             target="_blank" rel="noopener noreferrer"
+             class="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold transition shadow-md shadow-blue-500/20">
+            Write a Review
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </a>
+        </div>
+        <div class="glass rounded-2xl p-4">
+          <div class="grid grid-cols-3 gap-3 text-center">
+            <div><p class="text-lg font-bold text-blue-600">100%</p><p class="text-[11px] text-slate-500 mt-0.5">Genuine</p></div>
+            <div class="border-x border-slate-200"><p class="text-lg font-bold text-blue-600">Fast</p><p class="text-[11px] text-slate-500 mt-0.5">Service</p></div>
+            <div><p class="text-lg font-bold text-blue-600">Trusted</p><p class="text-[11px] text-slate-500 mt-0.5">Local Shop</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TWO-COLUMN FOOTER -->
+    <footer class="max-w-lg mx-auto px-4 pb-8">
+      <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 text-xs text-slate-400 border-t border-slate-200 pt-5">
+        <div>
+          <p>© <span id="year"></span> Mobile World · Shree Hari</p>
+          <p class="mt-0.5 text-[11px]">Crafted for the best mobile experience</p>
+        </div>
+        <div class="sm:text-right">
+          <p><span class="text-slate-500">Admin:</span> <span class="font-semibold text-slate-600">JEET DHIBAR</span></p>
+          <p class="mt-0.5"><span class="text-slate-500">Developer:</span> <span class="font-semibold text-slate-600">AVHISHEK DHIBAR</span></p>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- PRODUCT DETAIL MODAL -->
+  <div id="detailModal" class="overlay">
+    <div class="detail-panel">
+      <button id="closeDetail" class="absolute top-3 right-3 z-10 w-9 h-9 rounded-full bg-white/90 shadow flex items-center justify-center text-slate-700 hover:bg-white transition text-lg leading-none">
+        &times;
+      </button>
+
+      <div class="aspect-square bg-slate-100 w-full">
+        <img id="detailImg" src="" alt="" class="w-full h-full object-cover" />
+      </div>
+
+      <div class="p-5 pb-6">
+        <span id="detailCat" class="text-[11px] font-semibold uppercase tracking-wide text-blue-600 bg-blue-50 px-2 py-0.5 rounded"></span>
+        <h2 id="detailTitle" class="text-lg font-bold text-slate-900 mt-2 leading-snug"></h2>
+        <div id="detailPrice" class="mt-2 text-xl font-bold text-blue-600"></div>
+        <p id="detailDesc" class="text-sm text-slate-500 mt-3 leading-relaxed"></p>
+
+        <button id="detailPreOrderBtn"
+                class="mt-5 w-full py-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold transition active:scale-[0.98] shadow-lg">
+          Pre-Order Now
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRE-ORDER FORM MODAL -->
+  <div id="preOrderModal" class="overlay" style="align-items:center;padding:1rem;">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6 relative">
+      <button id="closeModal" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-xl leading-none">&times;</button>
+      <h3 class="text-lg font-bold text-slate-900 mb-1">Pre-Order Now</h3>
+      <p id="modalProductName" class="text-sm text-slate-500 mb-3 truncate"></p>
+
+      <div class="shop-warning mb-4">
+        Note: Pre-orders must be collected in-person from our physical shop.
+      </div>
+
+      <form id="preOrderForm" class="space-y-4">
+        <div>
+          <label class="block text-xs font-medium text-slate-600 mb-1">Your Name *</label>
+          <input type="text" id="poName" required minlength="3" placeholder="Enter full name"
+                 class="w-full px-3 py-2.5 rounded-xl border border-slate-200 text-sm focus:border-blue-500 focus:outline-none" />
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-600 mb-1">Mobile Number *</label>
+          <input type="tel" id="poPhone" required pattern="[6-9][0-9]{9}" maxlength="10" placeholder="10-digit mobile number"
+                 class="w-full px-3 py-2.5 rounded-xl border border-slate-200 text-sm focus:border-blue-500 focus:outline-none" />
+        </div>
+        <div class="cf-turnstile" data-sitekey="YOUR_TURNSTILE_SITE_KEY" data-theme="light"></div>
+        <button type="submit" id="poSubmitBtn"
+                class="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold transition active:scale-[0.98]">
+          Confirm Pre-Order
+        </button>
+      </form>
+      <p id="poError" class="text-red-500 text-xs mt-3 hidden text-center"></p>
+    </div>
+  </div>
+
+  <!-- CART DRAWER -->
+  <div id="cartOverlay"></div>
+  <div id="cartDrawer">
+    <div class="flex items-center justify-between px-4 py-4 border-b border-slate-100">
+      <h3 class="font-bold text-slate-900">My Pre-Orders</h3>
+      <button id="closeCart" class="text-slate-400 hover:text-slate-600 text-xl leading-none">&times;</button>
+    </div>
+    <div id="cartList" class="flex-1 overflow-y-auto p-4 space-y-3"></div>
+    <div id="cartEmpty" class="flex-1 flex items-center justify-center text-sm text-slate-400 p-6 text-center hidden">
+      No pre-orders yet.<br/>Browse products and place one!
+    </div>
+  </div>
+
+  <script>
+  (function () {
+    const SUPABASE_URL = 'https://bxukayuqaylnjazpscai.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_fe3TPiytqpv_wr8abcNL2Q_Re_LE1hn';
+    const PHOTO_BUCKET = 'customer-photos';
+    const PAGE_SIZE = 16;
+
+    const FALLBACK_IMAGES = [
+      "images/customer1.jpg","images/customer2.jpg","images/customer3.jpg",
+      "images/customer4.jpg","images/customer5.jpg","images/customer6.jpg",
+      "images/customer7.jpg","images/customer8.jpg","images/customer9.jpg"
+    ];
+
+    let supabaseClient = null;
+    try {
+      if (window.supabase && typeof window.supabase.createClient === 'function') {
+        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+      }
+    } catch (e) {
+      console.error('Supabase init failed:', e);
+    }
+
+    // CART
+    const CART_KEY = 'mw_preorders';
+    function getCart() {
+      try { return JSON.parse(localStorage.getItem(CART_KEY) || '[]'); } catch { return []; }
+    }
+    function saveCart(items) {
+      localStorage.setItem(CART_KEY, JSON.stringify(items));
+      updateCartBadge();
+    }
+    function updateCartBadge() {
+      const count = getCart().length;
+      const badge = document.getElementById('cartBadge');
+      badge.textContent = count;
+      badge.dataset.count = count;
+    }
+    function addToCart(item) {
+      const cart = getCart();
+      cart.unshift(item);
+      saveCart(cart);
+    }
+
+    // SPLASH
+    const splash = document.getElementById('splash');
+    const splashVideo = document.getElementById('splashVideo');
+    const main = document.getElementById('main');
+    let splashDismissed = false;
+
+    function dismissSplash() {
+      if (splashDismissed) return;
+      splashDismissed = true;
+      splash.classList.add('hidden');
+      main.classList.remove('opacity-0');
+      main.classList.add('opacity-100');
+      setTimeout(() => splash.classList.add('removed'), 600);
+      document.querySelectorAll('.section-enter').forEach((el, i) => {
+        setTimeout(() => el.classList.add('visible'), 80 + i * 90);
+      });
+    }
+    if (splashVideo) {
+      splashVideo.addEventListener('ended', dismissSplash);
+      splashVideo.play().catch(() => {});
+    }
+    setTimeout(dismissSplash, 4500);
+
+    // CUSTOMER PHOTOS SLIDER
+    const track = document.getElementById('sliderTrack');
+    const dotsBox = document.getElementById('sliderDots');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const container = document.getElementById('slider');
+    let images = [], current = 0, autoTimer = null, isDragging = false, startX = 0;
+
+    function buildSlider(list) {
+      images = list.length ? list : FALLBACK_IMAGES;
+      track.innerHTML = ''; dotsBox.innerHTML = '';
+      images.forEach((src, i) => {
+        const slide = document.createElement('div');
+        slide.className = 'slider-slide';
+        slide.innerHTML = `<img src="${src}" alt="Customer ${i+1}" loading="${i===0?'eager':'lazy'}" decoding="async"/><div class="slider-overlay"></div>`;
+        track.appendChild(slide);
+        const dot = document.createElement('button');
+        dot.className = 'slider-dot' + (i===0 ? ' active' : '');
+        dot.addEventListener('click', () => goTo(i));
+        dotsBox.appendChild(dot);
+      });
+      current = 0; updateSlider(); resetAuto();
+    }
+    function updateSlider() {
+      track.style.transform = 'translateX(-' + (current * 100) + '%)';
+      Array.from(dotsBox.children).forEach((d, i) => d.classList.toggle('active', i === current));
+    }
+    function goTo(i) { current = (i + images.length) % images.length; updateSlider(); resetAuto(); }
+    function next() { goTo(current + 1); }
+    function prev() { goTo(current - 1); }
+    function resetAuto() {
+      clearInterval(autoTimer);
+      if (images.length > 1) autoTimer = setInterval(next, 3800);
+    }
+    if (prevBtn) prevBtn.addEventListener('click', prev);
+    if (nextBtn) nextBtn.addEventListener('click', next);
+    if (container) {
+      container.addEventListener('touchstart', e => {
+        isDragging = true; startX = e.touches[0].clientX;
+        track.style.transition = 'none'; clearInterval(autoTimer);
+      }, { passive: true });
+      container.addEventListener('touchmove', e => {
+        if (!isDragging) return;
+        const diff = e.touches[0].clientX - startX;
+        track.style.transform = 'translateX(' + (-current * 100 + (diff / container.offsetWidth) * 100) + '%)';
+      }, { passive: true });
+      container.addEventListener('touchend', e => {
+        isDragging = false; track.style.transition = '';
+        const diff = e.changedTouches[0].clientX - startX;
+        if (Math.abs(diff) > 50) diff > 0 ? prev() : next(); else updateSlider();
+        resetAuto();
+      });
+    }
+
+    async function loadCustomerPhotos() {
+      if (!supabaseClient) { buildSlider(FALLBACK_IMAGES); return; }
+      try {
+        const { data, error } = await supabaseClient.storage.from(PHOTO_BUCKET).list('', {
+          limit: 100, sortBy: { column: 'created_at', order: 'desc' }
+        });
+        if (error || !data || !data.length) { buildSlider(FALLBACK_IMAGES); return; }
+        const files = data.filter(f => f.name && /\.(jpe?g|png|webp|gif)$/i.test(f.name));
+        if (!files.length) { buildSlider(FALLBACK_IMAGES); return; }
+        const urls = files.map(f => {
+          const { data: u } = supabaseClient.storage.from(PHOTO_BUCKET).getPublicUrl(f.name);
+          return u.publicUrl;
+        });
+        buildSlider(urls);
+      } catch (e) {
+        console.warn('Photos load failed:', e);
+        buildSlider(FALLBACK_IMAGES);
+      }
+    }
+    loadCustomerPhotos();
+
+    // PRODUCTS
+    let currentPage = 0, currentCategory = 'all', currentSearch = '';
+    let isLoadingProducts = false, hasMoreProducts = true;
+    const productsGrid = document.getElementById('productsGrid');
+    const loadMoreBtn = document.getElementById('loadMoreBtn');
+    const productsLoading = document.getElementById('productsLoading');
+    const productsEnd = document.getElementById('productsEnd');
+    const productMap = {};
+
+    async function fetchProducts(reset) {
+      if (!supabaseClient || isLoadingProducts) return;
+      if (reset) {
+        currentPage = 0; hasMoreProducts = true;
+        productsGrid.innerHTML = '';
+        productsEnd.classList.add('hidden');
+        loadMoreBtn.classList.add('hidden');
+      }
+      if (!hasMoreProducts) return;
+
+      isLoadingProducts = true;
+      productsLoading.classList.remove('hidden');
+      loadMoreBtn.classList.add('hidden');
+
+      const from = currentPage * PAGE_SIZE;
+      const to = from + PAGE_SIZE - 1;
+
+      try {
+        let query = supabaseClient
+          .from('products')
+          .select('*')
+          .or('status.is.null,status.eq.available')
+          .eq('in_stock', true)
+          .order('created_at', { ascending: false })
+          .range(from, to);
+
+        if (currentCategory !== 'all') query = query.eq('category', currentCategory);
+        if (currentSearch.trim()) {
+          query = query.or(`name.ilike.%${currentSearch.trim()}%,description.ilike.%${currentSearch.trim()}%`);
+        }
+
+        const { data, error } = await query;
+        productsLoading.classList.add('hidden');
+        isLoadingProducts = false;
+
+        if (error) { console.error(error); return; }
+
+        if (!data || data.length === 0) {
+          hasMoreProducts = false;
+          if (currentPage === 0) {
+            productsGrid.innerHTML = '<p class="col-span-2 text-center text-sm text-slate-400 py-10">No products found</p>';
+          } else {
+            productsEnd.classList.remove('hidden');
+          }
+          return;
+        }
+
+        data.forEach(p => { productMap[p.id] = p; });
+        renderProductCards(data);
+
+        if (data.length < PAGE_SIZE) {
+          hasMoreProducts = false;
+          productsEnd.classList.remove('hidden');
+        } else {
+          hasMoreProducts = true;
+          loadMoreBtn.classList.remove('hidden');
+        }
+        currentPage++;
+      } catch (e) {
+        console.error('fetchProducts error:', e);
+        productsLoading.classList.add('hidden');
+        isLoadingProducts = false;
+      }
+    }
+
+    // CLEAN GRID: image + title + price only
+    function renderProductCards(products) {
+      const html = products.map(p => {
+        const hasDiscount = p.discount_price && Number(p.discount_price) < Number(p.price);
+        return `
+          <div class="product-card" data-id="${p.id}" id="product-card-${p.id}">
+            <div class="aspect-square bg-slate-100 overflow-hidden">
+              <img src="${p.image_url || ''}" alt="${p.name || ''}"
+                   loading="lazy" decoding="async"
+                   class="w-full h-full object-cover"
+                   onerror="this.style.opacity='0.3'" />
+            </div>
+            <div class="p-3">
+              <h3 class="text-sm font-semibold text-slate-900 line-clamp-2 leading-snug">${p.name || ''}</h3>
+              <div class="mt-1.5 flex items-baseline gap-1.5">
+                ${hasDiscount
+                  ? `<span class="text-sm font-bold text-blue-600">₹${p.discount_price}</span>
+                     <span class="text-xs text-slate-400 line-through">₹${p.price}</span>`
+                  : `<span class="text-sm font-bold text-blue-600">₹${p.price}</span>`
+                }
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+      productsGrid.insertAdjacentHTML('beforeend', html);
+    }
+
+    function hideProductCard(productId) {
+      const card = document.getElementById('product-card-' + productId);
+      if (card) {
+        card.style.transition = 'opacity 0.3s, transform 0.3s';
+        card.style.opacity = '0';
+        card.style.transform = 'scale(0.95)';
+        setTimeout(() => card.remove(), 300);
+      }
+      delete productMap[productId];
+    }
+
+    document.getElementById('categoryFilters').addEventListener('click', e => {
+      const btn = e.target.closest('.cat-btn');
+      if (!btn) return;
+      document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentCategory = btn.dataset.cat;
+      fetchProducts(true);
+    });
+
+    let searchTimeout;
+    document.getElementById('productSearch').addEventListener('input', e => {
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(() => {
+        currentSearch = e.target.value;
+        fetchProducts(true);
+      }, 350);
+    });
+
+    loadMoreBtn.addEventListener('click', () => fetchProducts(false));
+    try {
+      const obs = new IntersectionObserver(entries => {
+        if (entries[0].isIntersecting && hasMoreProducts && !isLoadingProducts) fetchProducts(false);
+      }, { rootMargin: '200px' });
+      obs.observe(loadMoreBtn);
+    } catch (_) {}
+
+    fetchProducts(true);
+
+    // PRODUCT DETAIL MODAL
+    const detailModal = document.getElementById('detailModal');
+    let selectedProductId = null, selectedProductName = '';
+
+    productsGrid.addEventListener('click', e => {
+      const card = e.target.closest('.product-card');
+      if (card) openDetail(card.dataset.id);
+    });
+
+    function openDetail(id) {
+      const p = productMap[id];
+      if (!p) return;
+      selectedProductId = id;
+      selectedProductName = p.name || '';
+
+      document.getElementById('detailImg').src = p.image_url || '';
+      document.getElementById('detailTitle').textContent = p.name || '';
+      document.getElementById('detailCat').textContent = (p.category || '').replace('_', ' ');
+      document.getElementById('detailDesc').textContent = p.description || 'No description available.';
+      const hasDiscount = p.discount_price && Number(p.discount_price) < Number(p.price);
+      document.getElementById('detailPrice').innerHTML = hasDiscount
+        ? `₹${p.discount_price} <span class="text-slate-400 line-through font-normal text-base ml-1">₹${p.price}</span>`
+        : `₹${p.price}`;
+
+      detailModal.classList.add('open');
+    }
+
+    document.getElementById('closeDetail').addEventListener('click', () => detailModal.classList.remove('open'));
+    detailModal.addEventListener('click', e => {
+      if (e.target === detailModal) detailModal.classList.remove('open');
+    });
+
+    document.getElementById('detailPreOrderBtn').addEventListener('click', () => {
+      detailModal.classList.remove('open');
+      openPreOrderForm();
+    });
+
+    // PRE-ORDER FORM
+    function openPreOrderForm() {
+      document.getElementById('modalProductName').textContent = selectedProductName;
+      document.getElementById('poName').value = '';
+      document.getElementById('poPhone').value = '';
+      document.getElementById('poError').classList.add('hidden');
+      document.getElementById('preOrderModal').classList.add('open');
+    }
+
+    document.getElementById('closeModal').addEventListener('click', () => {
+      document.getElementById('preOrderModal').classList.remove('open');
+    });
+    document.getElementById('preOrderModal').addEventListener('click', e => {
+      if (e.target === document.getElementById('preOrderModal')) {
+        document.getElementById('preOrderModal').classList.remove('open');
+      }
+    });
+
+    document.getElementById('preOrderForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const customerName = document.getElementById('poName').value.trim();
+      const phoneNumber = document.getElementById('poPhone').value.trim();
+      const errEl = document.getElementById('poError');
+      const btn = document.getElementById('poSubmitBtn');
+
+      if (customerName.length < 3) {
+        errEl.textContent = 'Name must be at least 3 characters';
+        errEl.classList.remove('hidden');
+        return;
+      }
+      if (!/^[6-9]\d{9}$/.test(phoneNumber)) {
+        errEl.textContent = 'Enter a valid 10-digit Indian mobile number';
+        errEl.classList.remove('hidden');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Submitting...';
+      errEl.classList.add('hidden');
+
+      try {
+        let userIp = '0.0.0.0';
+        try {
+          const res = await fetch('https://api.ipify.org?format=json');
+          const data = await res.json();
+          if (data.ip) userIp = data.ip;
+        } catch (e) {
+          console.log('IP fetch failed, using fallback IP');
+        }
+
+        if (!supabaseClient) throw new Error('Service unavailable');
+
+        try {
+          const { data: banned } = await supabaseClient
+            .from('blacklisted_ips')
+            .select('id')
+            .eq('ip_address', userIp)
+            .limit(1);
+          if (banned && banned.length > 0) {
+            errEl.textContent = 'Your request has been blocked. Please contact the shop.';
+            errEl.classList.remove('hidden');
+            return;
+          }
+        } catch (_) {}
+
+        const { error: insertError } = await supabaseClient
+          .from('pre_orders')
+          .insert([
+            {
+              customer_name: customerName,
+              phone_number: phoneNumber,
+              customer_phone: phoneNumber,
+              product_id: String(selectedProductId),
+              product_name: selectedProductName,
+              user_ip: userIp,
+              status: 'pending'
+            }
+          ]);
+
+        if (insertError) {
+          console.log(insertError);
+          const msg = insertError.message || '';
+          if (msg.includes('blocked') || msg.includes('blacklisted')) {
+            errEl.textContent = 'Your IP address has been blocked from placing orders.';
+          } else if (msg.includes('Rate limit') || msg.includes('Maximum 10')) {
+            errEl.textContent = 'Rate limit exceeded: Maximum 10 pre-orders per hour allowed.';
+          } else {
+            errEl.textContent = 'Submission failed. Please try again.';
+          }
+          errEl.classList.remove('hidden');
+          return;
+        }
+
+        try {
+          await supabaseClient
+            .from('products')
+            .update({ status: 'reserved' })
+            .eq('id', selectedProductId);
+        } catch (reserveErr) {
+          console.warn('Could not reserve product:', reserveErr);
+        }
+
+        const p = productMap[selectedProductId] || {};
+        addToCart({
+          id: selectedProductId,
+          name: selectedProductName,
+          image: p.image_url || '',
+          price: p.discount_price || p.price || '',
+          time: new Date().toISOString()
+        });
+
+        hideProductCard(selectedProductId);
+
+        document.getElementById('preOrderModal').classList.remove('open');
+        alert('Pre-order submitted successfully! Please collect from our shop. We will call you soon.');
+
+      } catch (err) {
+        console.log(err);
+        errEl.textContent = 'Submission failed. Please try again.';
+        errEl.classList.remove('hidden');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Confirm Pre-Order';
+      }
+    });
+
+    // CART DRAWER
+    const cartDrawer = document.getElementById('cartDrawer');
+    const cartOverlay = document.getElementById('cartOverlay');
+
+    function openCart() {
+      renderCart();
+      cartDrawer.classList.add('open');
+      cartOverlay.classList.add('open');
+    }
+    function closeCart() {
+      cartDrawer.classList.remove('open');
+      cartOverlay.classList.remove('open');
+    }
+
+    document.getElementById('cartBtn').addEventListener('click', openCart);
+    document.getElementById('closeCart').addEventListener('click', closeCart);
+    cartOverlay.addEventListener('click', closeCart);
+
+    function renderCart() {
+      const cart = getCart();
+      const list = document.getElementById('cartList');
+      const empty = document.getElementById('cartEmpty');
+      if (!cart.length) {
+        list.innerHTML = '';
+        empty.classList.remove('hidden');
+        return;
+      }
+      empty.classList.add('hidden');
+      list.innerHTML = cart.map(item => `
+        <div class="flex gap-3 items-center p-3 rounded-xl border border-slate-100 bg-slate-50">
+          <img src="${item.image}" class="w-12 h-12 rounded-lg object-cover bg-white border" onerror="this.style.opacity='0.3'" />
+          <div class="flex-1 min-w-0">
+            <p class="text-sm font-semibold text-slate-900 truncate">${item.name}</p>
+            <p class="text-xs text-blue-600 font-medium mt-0.5">${item.price ? '₹' + item.price : ''}</p>
+            <p class="text-xs font-bold text-red-600 mt-1">Please visit our shop to collect</p>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    updateCartBadge();
+    document.getElementById('year').textContent = new Date().getFullYear();
+  })();
+  </script>
+</body>
+</html>
