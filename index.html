@@ -53,76 +53,24 @@
       font-family: 'Inter', system-ui, sans-serif;
       min-height: 100vh;
       margin: 0;
-      -webkit-font-smoothing: antialiased;
-      transform: translateZ(0);
     }
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: #FAF5E8; }
     ::-webkit-scrollbar-thumb { background: #D4AF37; border-radius: 3px; }
 
-    /* ========== SPLASH – FIXED LAYOUT, NO SHIFT, NO PLAY ICON ========== */
     #splash {
-      position: fixed;
-      inset: 0;
-      z-index: 9999;
-      background: #FFFDF7;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      transition: opacity 0.6s ease-out;
+      position: fixed; inset: 0; z-index: 9999; background: #FFFDF7;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden; transition: opacity 0.6s ease-out;
     }
     #splash.hidden { opacity: 0; pointer-events: none; }
     #splash.removed { display: none; }
-
-    /* Locked container prevents layout shift (CLS) */
-    #splash .video-wrap {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      background: #FFFDF7;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    #splash video {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      display: block;
-      background: #FFFDF7;
-      -webkit-appearance: none;
-    }
-
-    /* Completely hide every native control / big play button on Android WebView */
-    #splash video::-webkit-media-controls,
-    #splash video::-webkit-media-controls-panel,
-    #splash video::-webkit-media-controls-play-button,
-    #splash video::-webkit-media-controls-start-playback-button,
-    #splash video::-webkit-media-controls-enclosure {
-      display: none !important;
-      -webkit-appearance: none !important;
-      opacity: 0 !important;
-      width: 0 !important;
-      height: 0 !important;
-      pointer-events: none !important;
-    }
-
+    #splash video { width: 100%; height: 100%; object-fit: contain; display: block; }
     @media (min-width: 769px) {
-      #splash .video-wrap {
-        max-width: 480px;
-        max-height: 90vh;
-        aspect-ratio: 9/16;
-        border-radius: 12px;
-        box-shadow: 0 20px 60px rgba(128, 0, 32, 0.15);
-      }
       #splash video {
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
-        border-radius: 12px;
+        width: 100%; height: auto; max-width: 480px; max-height: 90vh;
+        aspect-ratio: 9/16; object-fit: contain; border-radius: 12px;
+        box-shadow: 0 20px 60px rgba(128, 0, 32, 0.15);
       }
     }
 
@@ -137,14 +85,11 @@
       aspect-ratio: 4/5; max-height: 480px; background: #FAF5E8;
       border: 1px solid rgba(212, 175, 55, 0.3);
       box-shadow: 0 6px 24px rgba(128, 0, 32, 0.08);
-      transform: translateZ(0);
     }
     @media (min-width: 640px) { .slider-container { aspect-ratio: 16/10; max-height: 420px; } }
     .slider-track {
       display: flex; height: 100%;
-      transition: transform 0.55s cubic-bezier(0.25,1,0.5,1);
-      will-change: transform;
-      transform: translateZ(0);
+      transition: transform 0.55s cubic-bezier(0.25,1,0.5,1); will-change: transform;
     }
     .slider-slide { min-width: 100%; height: 100%; position: relative; }
     .slider-slide img {
@@ -182,11 +127,10 @@
     .slider-next { right: 0.75rem; }
 
     .section-enter {
-      opacity: 0; transform: translateY(20px) translateZ(0);
+      opacity: 0; transform: translateY(20px);
       transition: opacity 0.6s ease, transform 0.6s ease;
-      will-change: opacity, transform;
     }
-    .section-enter.visible { opacity: 1; transform: translateY(0) translateZ(0); }
+    .section-enter.visible { opacity: 1; transform: translateY(0); }
 
     .cat-btn {
       padding: 0.45rem 1rem; border-radius: 9999px; font-size: 0.75rem;
@@ -204,11 +148,9 @@
     .product-card {
       background: #FFFFFF; border: 1px solid rgba(212, 175, 55, 0.25); border-radius: 1rem;
       overflow: hidden; transition: transform 0.2s, box-shadow 0.2s; cursor: pointer;
-      transform: translateZ(0);
-      will-change: transform;
     }
     .product-card:hover {
-      transform: translateY(-2px) translateZ(0);
+      transform: translateY(-2px);
       box-shadow: 0 10px 25px rgba(128, 0, 32, 0.1);
       border-color: #D4AF37;
     }
@@ -242,7 +184,6 @@
       position: relative;
       border: 1px solid rgba(212, 175, 55, 0.4);
       animation: slideUp 0.3s ease;
-      transform: translateZ(0);
     }
     @media (min-width: 640px) {
       #detailModal .detail-panel {
@@ -251,20 +192,19 @@
       }
     }
     @keyframes slideUp {
-      from { transform: translateY(40px) translateZ(0); opacity: 0; }
-      to { transform: translateY(0) translateZ(0); opacity: 1; }
+      from { transform: translateY(40px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
     }
 
     #cartDrawer {
       position: fixed; top: 0; right: 0; bottom: 0; width: min(360px, 100vw);
       background: #FFFDF7; z-index: 10001;
-      transform: translateX(100%) translateZ(0); transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+      transform: translateX(100%); transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
       box-shadow: -8px 0 30px rgba(0,0,0,0.15);
       display: flex; flex-direction: column;
       border-left: 1px solid rgba(212, 175, 55, 0.3);
-      will-change: transform;
     }
-    #cartDrawer.open { transform: translateX(0) translateZ(0); }
+    #cartDrawer.open { transform: translateX(0); }
     #cartOverlay {
       position: fixed; inset: 0; z-index: 10000;
       background: rgba(45, 24, 16, 0.5); display: none;
@@ -299,38 +239,12 @@
 </head>
 <body class="w-screen min-h-screen overflow-x-hidden antialiased">
 
-  <!-- VIDEO SPLASH – FIXED CONTAINER + STRICT ATTRIBUTES -->
+  <!-- VIDEO SPLASH -->
   <div id="splash">
-    <div class="video-wrap">
-      <video id="splashVideo"
-             autoplay
-             loop
-             muted
-             playsinline
-             webkit-playsinline
-             preload="auto"
-             poster=""
-             disablePictureInPicture
-             controlsList="nodownload nofullscreen noremoteplayback"
-             style="width:100%;height:100%;object-fit:contain;display:block;background:#FFFDF7;">
-        <source src="images/intro.mp4" type="video/mp4">
-      </video>
-    </div>
+    <video id="splashVideo" autoplay muted playsinline webkit-playsinline preload="auto">
+      <source src="images/intro.mp4" type="video/mp4">
+    </video>
   </div>
-
-  <!-- FORCE AUTOPLAY FALLBACK (runs as early as possible) -->
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      var v = document.getElementById('splashVideo');
-      if (v) {
-        v.muted = true;
-        v.setAttribute('muted', '');
-        v.playsInline = true;
-        var p = v.play();
-        if (p !== undefined) p.catch(function () {});
-      }
-    });
-  </script>
 
   <div id="main" class="opacity-0 transition-opacity duration-700">
 
@@ -338,7 +252,7 @@
     <header class="sticky top-0 z-50 bg-[#FFFDF7]/95 backdrop-blur-md border-b border-[#D4AF37]/30 shadow-sm">
       <div class="max-w-lg mx-auto px-4 py-3 flex items-center justify-between">
         <div class="flex items-center gap-3">
-          <img src="images/logo.png" alt="Mobile World Logo" class="w-10 h-10 rounded-xl object-contain shadow-sm border border-[#D4AF37]/30" onerror="this.style.display='none'" decoding="async" />
+          <img src="images/logo.png" alt="Mobile World Logo" class="w-10 h-10 rounded-xl object-contain shadow-sm border border-[#D4AF37]/30" onerror="this.style.display='none'" />
           <div>
             <h1 class="font-serif text-base font-bold tracking-tight leading-none text-[#800020]">Mobile World</h1>
             <p class="text-[11px] text-[#D4AF37] font-medium tracking-wide mt-0.5">Shree Hari · Festival Edition</p>
@@ -476,7 +390,7 @@
       </button>
 
       <div class="aspect-square bg-[#FAF5E8] w-full">
-        <img id="detailImg" src="" alt="" class="w-full h-full object-cover" decoding="async" />
+        <img id="detailImg" src="" alt="" class="w-full h-full object-cover" />
       </div>
 
       <div class="p-5 pb-6">
@@ -684,7 +598,7 @@
       savePreOrders(list);
     }
 
-    // ========== SPLASH (optimized + forced autoplay) ==========
+    // ========== SPLASH ==========
     const splash = document.getElementById('splash');
     const splashVideo = document.getElementById('splashVideo');
     const main = document.getElementById('main');
@@ -701,24 +615,10 @@
         setTimeout(() => el.classList.add('visible'), 80 + i * 90);
       });
     }
-
     if (splashVideo) {
-      splashVideo.muted = true;
-      splashVideo.setAttribute('muted', '');
-      splashVideo.playsInline = true;
-
-      // Force play again (in case DOMContentLoaded already tried)
-      const playPromise = splashVideo.play();
-      if (playPromise !== undefined) {
-        playPromise.catch(function () {
-          setTimeout(dismissSplash, 600);
-        });
-      }
-
       splashVideo.addEventListener('ended', dismissSplash);
-      splashVideo.addEventListener('error', dismissSplash);
+      splashVideo.play().catch(() => {});
     }
-    // Safety timeout so splash never sticks
     setTimeout(dismissSplash, 4500);
 
     // ========== CUSTOMER PHOTOS SLIDER ==========
@@ -1100,6 +1000,7 @@
 
         const info = calcDiscountInfo(selectedOriginalPrice);
 
+        // ===== SAFE PAYLOAD – only columns that exist =====
         const payload = {
           customer_name: customerName,
           phone_number: phoneNumber,
@@ -1114,6 +1015,7 @@
           final_price: info.final
         };
 
+        // Remove undefined / null values so Supabase never rejects
         Object.keys(payload).forEach(k => {
           if (payload[k] === undefined || payload[k] === null) delete payload[k];
         });
@@ -1222,7 +1124,7 @@
           const itemFinal = applyDiscount(itemOriginal, cartInfo.percent);
           html += `
             <div class="flex gap-3 items-center p-3 rounded-xl border border-[#D4AF37]/30 bg-[#FFFDF7]">
-              <img src="${item.image}" class="w-12 h-12 rounded-lg object-cover bg-white border border-[#D4AF37]/20" onerror="this.style.opacity='0.3'" decoding="async" />
+              <img src="${item.image}" class="w-12 h-12 rounded-lg object-cover bg-white border border-[#D4AF37]/20" onerror="this.style.opacity='0.3'" />
               <div class="flex-1 min-w-0">
                 <p class="text-sm font-semibold text-[#800020] truncate">${item.name}</p>
                 <div class="flex items-baseline gap-1.5 mt-0.5">
@@ -1271,7 +1173,7 @@
           } else {
             html += `
               <div class="flex gap-3 items-center p-3 rounded-xl border border-[#D4AF37]/30 bg-[#FFFDF7]">
-                <img src="${item.image || ''}" class="w-12 h-12 rounded-lg object-cover bg-white border border-[#D4AF37]/20" onerror="this.style.opacity='0.3'" decoding="async" />
+                <img src="${item.image || ''}" class="w-12 h-12 rounded-lg object-cover bg-white border border-[#D4AF37]/20" onerror="this.style.opacity='0.3'" />
                 <div class="flex-1 min-w-0">
                   <p class="text-sm font-semibold text-[#800020] truncate">${item.name}</p>
                   <p class="text-xs text-[#800020] font-medium mt-0.5">₹${item.price || ''}</p>
@@ -1407,6 +1309,7 @@
 
         const firstItem = cart[0];
 
+        // ===== SAFE PAYLOAD – only columns that exist =====
         const payload = {
           customer_name: customerName,
           phone_number: phoneNumber,
