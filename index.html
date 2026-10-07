@@ -60,34 +60,69 @@
     ::-webkit-scrollbar-track { background: #FAF5E8; }
     ::-webkit-scrollbar-thumb { background: #D4AF37; border-radius: 3px; }
 
+    /* ========== SPLASH – FIXED LAYOUT, NO SHIFT, NO PLAY ICON ========== */
     #splash {
-      position: fixed; inset: 0; z-index: 9999; background: #FFFDF7;
-      display: flex; align-items: center; justify-content: center;
-      overflow: hidden; transition: opacity 0.6s ease-out;
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: #FFFDF7;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      transition: opacity 0.6s ease-out;
     }
     #splash.hidden { opacity: 0; pointer-events: none; }
     #splash.removed { display: none; }
-    #splash video {
-      width: 100%; height: 100%; object-fit: contain; display: block;
+
+    /* Locked container prevents layout shift (CLS) */
+    #splash .video-wrap {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
       background: #FFFDF7;
-      /* Hide default media controls / big play icon on Android WebView */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #splash video {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      background: #FFFDF7;
       -webkit-appearance: none;
     }
-    /* Completely hide native video controls & big play button */
+
+    /* Completely hide every native control / big play button on Android WebView */
     #splash video::-webkit-media-controls,
     #splash video::-webkit-media-controls-panel,
     #splash video::-webkit-media-controls-play-button,
-    #splash video::-webkit-media-controls-start-playback-button {
+    #splash video::-webkit-media-controls-start-playback-button,
+    #splash video::-webkit-media-controls-enclosure {
       display: none !important;
-      -webkit-appearance: none;
+      -webkit-appearance: none !important;
       opacity: 0 !important;
-      pointer-events: none;
+      width: 0 !important;
+      height: 0 !important;
+      pointer-events: none !important;
     }
+
     @media (min-width: 769px) {
-      #splash video {
-        width: 100%; height: auto; max-width: 480px; max-height: 90vh;
-        aspect-ratio: 9/16; object-fit: contain; border-radius: 12px;
+      #splash .video-wrap {
+        max-width: 480px;
+        max-height: 90vh;
+        aspect-ratio: 9/16;
+        border-radius: 12px;
         box-shadow: 0 20px 60px rgba(128, 0, 32, 0.15);
+      }
+      #splash video {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        border-radius: 12px;
       }
     }
 
@@ -264,17 +299,38 @@
 </head>
 <body class="w-screen min-h-screen overflow-x-hidden antialiased">
 
-  <!-- VIDEO SPLASH -->
+  <!-- VIDEO SPLASH – FIXED CONTAINER + STRICT ATTRIBUTES -->
   <div id="splash">
-    <video id="splashVideo"
-           autoplay muted playsinline webkit-playsinline
-           preload="auto"
-           poster=""
-           disablePictureInPicture
-           controlsList="nodownload nofullscreen noremoteplayback">
-      <source src="images/intro.mp4" type="video/mp4">
-    </video>
+    <div class="video-wrap">
+      <video id="splashVideo"
+             autoplay
+             loop
+             muted
+             playsinline
+             webkit-playsinline
+             preload="auto"
+             poster=""
+             disablePictureInPicture
+             controlsList="nodownload nofullscreen noremoteplayback"
+             style="width:100%;height:100%;object-fit:contain;display:block;background:#FFFDF7;">
+        <source src="images/intro.mp4" type="video/mp4">
+      </video>
+    </div>
   </div>
+
+  <!-- FORCE AUTOPLAY FALLBACK (runs as early as possible) -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var v = document.getElementById('splashVideo');
+      if (v) {
+        v.muted = true;
+        v.setAttribute('muted', '');
+        v.playsInline = true;
+        var p = v.play();
+        if (p !== undefined) p.catch(function () {});
+      }
+    });
+  </script>
 
   <div id="main" class="opacity-0 transition-opacity duration-700">
 
@@ -628,7 +684,7 @@
       savePreOrders(list);
     }
 
-    // ========== SPLASH (optimized for Android WebView) ==========
+    // ========== SPLASH (optimized + forced autoplay) ==========
     const splash = document.getElementById('splash');
     const splashVideo = document.getElementById('splashVideo');
     const main = document.getElementById('main');
@@ -647,22 +703,20 @@
     }
 
     if (splashVideo) {
-      // Force mute + play for Android WebView autoplay policy
       splashVideo.muted = true;
       splashVideo.setAttribute('muted', '');
       splashVideo.playsInline = true;
 
-      splashVideo.addEventListener('ended', dismissSplash);
-      splashVideo.addEventListener('error', dismissSplash);
-
-      // Try to play immediately; fallback on any failure
+      // Force play again (in case DOMContentLoaded already tried)
       const playPromise = splashVideo.play();
       if (playPromise !== undefined) {
-        playPromise.catch(() => {
-          // Autoplay blocked – dismiss after short delay
-          setTimeout(dismissSplash, 800);
+        playPromise.catch(function () {
+          setTimeout(dismissSplash, 600);
         });
       }
+
+      splashVideo.addEventListener('ended', dismissSplash);
+      splashVideo.addEventListener('error', dismissSplash);
     }
     // Safety timeout so splash never sticks
     setTimeout(dismissSplash, 4500);
@@ -884,7 +938,6 @@
       obs.observe(loadMoreBtn);
     } catch (_) {}
 
-    // Single initial fetch – no duplicates
     fetchProducts(true);
 
     // ========== PRODUCT DETAIL MODAL ==========
