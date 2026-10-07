@@ -258,7 +258,7 @@
             <p class="text-[11px] text-[#D4AF37] font-medium tracking-wide mt-0.5">Shree Hari · Festival Edition</p>
           </div>
         </div>
-        <button id="cartBtn" class="relative p-2 rounded-xl hover:bg-[#FAF5E8] transition border border-[#D4AF37]/20" aria-label="Pre-order bucket">
+        <button id="cartBtn" class="relative p-2 rounded-xl hover:bg-[#FAF5E8] transition border border-[#D4AF37]/20" aria-label="My Orders & Cart">
           <span style="font-size:22px;line-height:1;">🛍️</span>
           <span id="cartBadge" data-count="0">0</span>
         </button>
@@ -399,10 +399,16 @@
         <div id="detailPrice" class="mt-2 text-xl font-bold text-[#800020]"></div>
         <p id="detailDesc" class="text-sm text-[#800020]/70 mt-3 leading-relaxed"></p>
 
-        <button id="detailPreOrderBtn"
-                class="mt-5 w-full py-3.5 rounded-xl bg-gradient-to-r from-[#800020] to-[#9B111E] text-[#FFFDF7] text-sm font-semibold transition active:scale-[0.98] shadow-lg border border-[#D4AF37]">
-          Pre-Order Now
-        </button>
+        <div class="mt-5 flex flex-col gap-2.5">
+          <button id="detailAddToCartBtn"
+                  class="w-full py-3.5 rounded-xl bg-[#FAF5E8] text-[#800020] text-sm font-semibold transition active:scale-[0.98] border border-[#D4AF37] shadow-sm hover:bg-[#F3E5AB]">
+            Add to Cart
+          </button>
+          <button id="detailPreOrderBtn"
+                  class="w-full py-3.5 rounded-xl bg-gradient-to-r from-[#800020] to-[#9B111E] text-[#FFFDF7] text-sm font-semibold transition active:scale-[0.98] shadow-lg border border-[#D4AF37]">
+            Pre-Order Now
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -413,6 +419,8 @@
       <button id="closeModal" class="absolute top-4 right-4 text-[#800020]/50 hover:text-[#800020] text-xl leading-none">&times;</button>
       <h3 class="font-serif text-lg font-bold text-[#800020] mb-1">Pre-Order Now</h3>
       <p id="modalProductName" class="text-sm text-[#800020]/70 mb-3 truncate"></p>
+
+      <div id="poPriceBreakdown" class="mb-4 p-3 rounded-xl bg-[#FAF5E8] border border-[#D4AF37]/30 text-sm"></div>
 
       <div class="shop-warning mb-4">
         Note: Pre-orders must be collected in-person from our physical shop.
@@ -439,16 +447,71 @@
     </div>
   </div>
 
+  <!-- CART CHECKOUT FORM MODAL -->
+  <div id="cartCheckoutModal" class="overlay" style="align-items:center;padding:1rem;">
+    <div class="bg-[#FFFDF7] rounded-2xl shadow-2xl w-full max-w-sm p-6 relative border border-[#D4AF37]/40">
+      <button id="closeCartCheckout" class="absolute top-4 right-4 text-[#800020]/50 hover:text-[#800020] text-xl leading-none">&times;</button>
+      <h3 class="font-serif text-lg font-bold text-[#800020] mb-1">Checkout Cart</h3>
+      <p class="text-sm text-[#800020]/70 mb-3">Complete your order details</p>
+
+      <div id="ccPriceBreakdown" class="mb-4 p-3 rounded-xl bg-[#FAF5E8] border border-[#D4AF37]/30 text-sm"></div>
+
+      <div class="shop-warning mb-4">
+        Note: Orders must be collected in-person from our physical shop.
+      </div>
+
+      <form id="cartCheckoutForm" class="space-y-4">
+        <div>
+          <label class="block text-xs font-medium text-[#800020] mb-1">Your Name *</label>
+          <input type="text" id="ccName" required minlength="3" placeholder="Enter full name"
+                 class="w-full px-3 py-2.5 rounded-xl border border-[#D4AF37]/40 bg-white text-sm focus:border-[#800020] focus:outline-none" />
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-[#800020] mb-1">Mobile Number *</label>
+          <input type="tel" id="ccPhone" required pattern="[6-9][0-9]{9}" maxlength="10" placeholder="10-digit mobile number"
+                 class="w-full px-3 py-2.5 rounded-xl border border-[#D4AF37]/40 bg-white text-sm focus:border-[#800020] focus:outline-none" />
+        </div>
+        <div class="cf-turnstile" data-sitekey="YOUR_TURNSTILE_SITE_KEY" data-theme="light"></div>
+        <button type="submit" id="ccSubmitBtn"
+                class="w-full py-3 rounded-xl bg-gradient-to-r from-[#800020] to-[#9B111E] text-[#FFFDF7] font-semibold transition active:scale-[0.98] border border-[#D4AF37] shadow-md">
+          Confirm Order
+        </button>
+      </form>
+      <p id="ccError" class="text-red-600 text-xs mt-3 hidden text-center font-medium"></p>
+    </div>
+  </div>
+
+  <!-- SUCCESS CONFIRMATION MODAL -->
+  <div id="successModal" class="overlay" style="align-items:center;padding:1rem;">
+    <div class="bg-[#FFFDF7] rounded-2xl shadow-2xl w-full max-w-sm p-6 relative border border-[#D4AF37]/40 text-center">
+      <div class="w-14 h-14 mx-auto mb-4 rounded-full bg-green-100 flex items-center justify-center">
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <h3 class="font-serif text-lg font-bold text-[#800020] mb-2">Order Confirmed!</h3>
+      <p id="successMessage" class="text-sm text-[#800020]/80 mb-4 leading-relaxed"></p>
+      <button id="closeSuccess" class="w-full py-3 rounded-xl bg-gradient-to-r from-[#800020] to-[#9B111E] text-[#FFFDF7] text-sm font-semibold border border-[#D4AF37]">
+        Done
+      </button>
+    </div>
+  </div>
+
   <!-- CART DRAWER -->
   <div id="cartOverlay"></div>
   <div id="cartDrawer">
     <div class="flex items-center justify-between px-4 py-4 border-b border-[#D4AF37]/30 bg-[#FAF5E8]">
-      <h3 class="font-serif font-bold text-[#800020]">My Pre-Orders</h3>
+      <h3 class="font-serif font-bold text-[#800020]">My Orders & Cart</h3>
       <button id="closeCart" class="text-[#800020]/50 hover:text-[#800020] text-xl leading-none">&times;</button>
     </div>
     <div id="cartList" class="flex-1 overflow-y-auto p-4 space-y-3"></div>
     <div id="cartEmpty" class="flex-1 flex items-center justify-center text-sm text-[#800020]/50 p-6 text-center hidden">
-      No pre-orders yet.<br/>Browse products and place one!
+      No items yet.<br/>Browse products and add to cart or pre-order!
+    </div>
+    <div id="cartFooter" class="border-t border-[#D4AF37]/30 p-4 bg-[#FAF5E8] hidden">
+      <div id="cartTotals" class="mb-3 space-y-1 text-sm"></div>
+      <button id="cartCheckoutBtn"
+              class="w-full py-3 rounded-xl bg-gradient-to-r from-[#800020] to-[#9B111E] text-[#FFFDF7] text-sm font-semibold transition active:scale-[0.98] border border-[#D4AF37] shadow-md">
+        Checkout Cart
+      </button>
     </div>
   </div>
 
@@ -474,8 +537,30 @@
       console.error('Supabase init failed:', e);
     }
 
-    // CART
-    const CART_KEY = 'mw_preorders';
+    // ========== DYNAMIC DISCOUNT HELPERS ==========
+    function getDiscountPercent(amount) {
+      const val = Number(amount) || 0;
+      if (val >= 2000) return 20;
+      if (val >= 100) return 10;
+      return 0;
+    }
+    function applyDiscount(original, percent) {
+      const o = Number(original) || 0;
+      const p = Number(percent) || 0;
+      return Math.round(o * (100 - p) / 100);
+    }
+    function calcDiscountInfo(originalAmount) {
+      const original = Number(originalAmount) || 0;
+      const percent = getDiscountPercent(original);
+      const final = applyDiscount(original, percent);
+      const saved = original - final;
+      return { original, percent, final, saved };
+    }
+
+    // ========== CART + PRE-ORDERS (localStorage) ==========
+    const CART_KEY = 'mw_cart_v2';
+    const PREORDERS_KEY = 'mw_preorders_v2';
+
     function getCart() {
       try { return JSON.parse(localStorage.getItem(CART_KEY) || '[]'); } catch { return []; }
     }
@@ -483,19 +568,37 @@
       localStorage.setItem(CART_KEY, JSON.stringify(items));
       updateCartBadge();
     }
+    function getPreOrders() {
+      try { return JSON.parse(localStorage.getItem(PREORDERS_KEY) || '[]'); } catch { return []; }
+    }
+    function savePreOrders(items) {
+      localStorage.setItem(PREORDERS_KEY, JSON.stringify(items));
+      updateCartBadge();
+    }
     function updateCartBadge() {
-      const count = getCart().length;
+      const count = getCart().length + getPreOrders().length;
       const badge = document.getElementById('cartBadge');
       badge.textContent = count;
       badge.dataset.count = count;
     }
-    function addToCart(item) {
+    function addToCartLocal(item) {
       const cart = getCart();
+      if (cart.some(c => String(c.id) === String(item.id))) return false;
       cart.unshift(item);
       saveCart(cart);
+      return true;
+    }
+    function removeFromCartLocal(productId) {
+      const cart = getCart().filter(c => String(c.id) !== String(productId));
+      saveCart(cart);
+    }
+    function addToPreOrdersLocal(item) {
+      const list = getPreOrders();
+      list.unshift(item);
+      savePreOrders(list);
     }
 
-    // SPLASH
+    // ========== SPLASH ==========
     const splash = document.getElementById('splash');
     const splashVideo = document.getElementById('splashVideo');
     const main = document.getElementById('main');
@@ -518,7 +621,7 @@
     }
     setTimeout(dismissSplash, 4500);
 
-    // CUSTOMER PHOTOS SLIDER
+    // ========== CUSTOMER PHOTOS SLIDER ==========
     const track = document.getElementById('sliderTrack');
     const dotsBox = document.getElementById('sliderDots');
     const prevBtn = document.getElementById('prevBtn');
@@ -593,7 +696,7 @@
     }
     loadCustomerPhotos();
 
-    // PRODUCTS
+    // ========== PRODUCTS ==========
     let currentPage = 0, currentCategory = 'all', currentSearch = '';
     let isLoadingProducts = false, hasMoreProducts = true;
     const productsGrid = document.getElementById('productsGrid');
@@ -667,25 +770,28 @@
       }
     }
 
-    // CLEAN GRID: image + title + price only
     function renderProductCards(products) {
       const html = products.map(p => {
-        const hasDiscount = p.discount_price && Number(p.discount_price) < Number(p.price);
+        const original = Number(p.price) || 0;
+        const info = calcDiscountInfo(original);
+        const hasDisc = info.percent > 0;
+
         return `
           <div class="product-card" data-id="${p.id}" id="product-card-${p.id}">
-            <div class="aspect-square bg-[#FAF5E8] overflow-hidden">
+            <div class="aspect-square bg-[#FAF5E8] overflow-hidden relative">
               <img src="${p.image_url || ''}" alt="${p.name || ''}"
                    loading="lazy" decoding="async"
                    class="w-full h-full object-cover"
                    onerror="this.style.opacity='0.3'" />
+              ${hasDisc ? `<span class="absolute top-2 left-2 text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-emerald-500 text-white shadow">${info.percent}% OFF</span>` : ''}
             </div>
             <div class="p-3">
               <h3 class="text-sm font-semibold text-[#800020] line-clamp-2 leading-snug">${p.name || ''}</h3>
-              <div class="mt-1.5 flex items-baseline gap-1.5">
-                ${hasDiscount
-                  ? `<span class="text-sm font-bold text-[#800020]">₹${p.discount_price}</span>
-                     <span class="text-xs text-[#800020]/40 line-through">₹${p.price}</span>`
-                  : `<span class="text-sm font-bold text-[#800020]">₹${p.price}</span>`
+              <div class="mt-1.5 flex items-baseline gap-1.5 flex-wrap">
+                ${hasDisc
+                  ? `<span class="text-sm font-bold text-[#800020]">₹${info.final}</span>
+                     <span class="text-xs text-[#800020]/40 line-through">₹${original}</span>`
+                  : `<span class="text-sm font-bold text-[#800020]">₹${original}</span>`
                 }
               </div>
             </div>
@@ -734,9 +840,9 @@
 
     fetchProducts(true);
 
-    // PRODUCT DETAIL MODAL
+    // ========== PRODUCT DETAIL MODAL ==========
     const detailModal = document.getElementById('detailModal');
-    let selectedProductId = null, selectedProductName = '';
+    let selectedProductId = null, selectedProductName = '', selectedOriginalPrice = 0;
 
     productsGrid.addEventListener('click', e => {
       const card = e.target.closest('.product-card');
@@ -748,15 +854,23 @@
       if (!p) return;
       selectedProductId = id;
       selectedProductName = p.name || '';
+      selectedOriginalPrice = Number(p.price) || 0;
 
       document.getElementById('detailImg').src = p.image_url || '';
       document.getElementById('detailTitle').textContent = p.name || '';
       document.getElementById('detailCat').textContent = (p.category || '').replace('_', ' ');
       document.getElementById('detailDesc').textContent = p.description || 'No description available.';
-      const hasDiscount = p.discount_price && Number(p.discount_price) < Number(p.price);
-      document.getElementById('detailPrice').innerHTML = hasDiscount
-        ? `₹${p.discount_price} <span class="text-[#800020]/40 line-through font-normal text-base ml-1">₹${p.price}</span>`
-        : `₹${p.price}`;
+
+      const info = calcDiscountInfo(selectedOriginalPrice);
+      if (info.percent > 0) {
+        document.getElementById('detailPrice').innerHTML = `
+          ₹${info.final}
+          <span class="text-[#800020]/40 line-through font-normal text-base ml-1">₹${info.original}</span>
+          <span class="ml-2 text-[11px] font-bold px-1.5 py-0.5 rounded-full bg-emerald-500 text-white">${info.percent}% OFF</span>
+        `;
+      } else {
+        document.getElementById('detailPrice').textContent = '₹' + info.original;
+      }
 
       detailModal.classList.add('open');
     }
@@ -766,17 +880,64 @@
       if (e.target === detailModal) detailModal.classList.remove('open');
     });
 
+    // ADD TO CART
+    document.getElementById('detailAddToCartBtn').addEventListener('click', async () => {
+      if (!selectedProductId) return;
+      const p = productMap[selectedProductId] || {};
+
+      const added = addToCartLocal({
+        id: selectedProductId,
+        name: selectedProductName,
+        image: p.image_url || '',
+        price: selectedOriginalPrice,
+        time: new Date().toISOString()
+      });
+
+      if (!added) {
+        alert('This item is already in your cart.');
+        return;
+      }
+
+      try {
+        if (supabaseClient) {
+          await supabaseClient
+            .from('products')
+            .update({ status: 'reserved' })
+            .eq('id', selectedProductId);
+        }
+      } catch (reserveErr) {
+        console.warn('Could not reserve product:', reserveErr);
+      }
+
+      hideProductCard(selectedProductId);
+      detailModal.classList.remove('open');
+      alert('Added to cart! Open the bag to checkout.');
+    });
+
     document.getElementById('detailPreOrderBtn').addEventListener('click', () => {
       detailModal.classList.remove('open');
       openPreOrderForm();
     });
 
-    // PRE-ORDER FORM
+    // ========== PRE-ORDER FORM ==========
     function openPreOrderForm() {
       document.getElementById('modalProductName').textContent = selectedProductName;
       document.getElementById('poName').value = '';
       document.getElementById('poPhone').value = '';
       document.getElementById('poError').classList.add('hidden');
+
+      const info = calcDiscountInfo(selectedOriginalPrice);
+      const box = document.getElementById('poPriceBreakdown');
+      if (info.percent > 0) {
+        box.innerHTML = `
+          <div class="flex justify-between"><span>Original</span><span>₹${info.original}</span></div>
+          <div class="flex justify-between text-emerald-600 font-medium"><span>Discount (${info.percent}% OFF)</span><span>-₹${info.saved}</span></div>
+          <div class="flex justify-between font-bold text-[#800020] mt-1 pt-1 border-t border-[#D4AF37]/30"><span>Final Amount</span><span>₹${info.final}</span></div>
+        `;
+      } else {
+        box.innerHTML = `<div class="flex justify-between font-bold text-[#800020]"><span>Amount</span><span>₹${info.original}</span></div>`;
+      }
+
       document.getElementById('preOrderModal').classList.add('open');
     }
 
@@ -837,22 +998,34 @@
           }
         } catch (_) {}
 
+        const info = calcDiscountInfo(selectedOriginalPrice);
+
+        // ===== SAFE PAYLOAD – only columns that exist =====
+        const payload = {
+          customer_name: customerName,
+          phone_number: phoneNumber,
+          customer_phone: phoneNumber,
+          product_id: String(selectedProductId || ''),
+          product_name: selectedProductName || '',
+          user_ip: userIp,
+          status: 'pending',
+          order_type: 'preorder',
+          subtotal: info.original,
+          discount_amount: info.saved,
+          final_price: info.final
+        };
+
+        // Remove undefined / null values so Supabase never rejects
+        Object.keys(payload).forEach(k => {
+          if (payload[k] === undefined || payload[k] === null) delete payload[k];
+        });
+
         const { error: insertError } = await supabaseClient
           .from('pre_orders')
-          .insert([
-            {
-              customer_name: customerName,
-              phone_number: phoneNumber,
-              customer_phone: phoneNumber,
-              product_id: String(selectedProductId),
-              product_name: selectedProductName,
-              user_ip: userIp,
-              status: 'pending'
-            }
-          ]);
+          .insert([payload]);
 
         if (insertError) {
-          console.log(insertError);
+          console.error('Supabase Submission Error:', insertError);
           const msg = insertError.message || '';
           if (msg.includes('blocked') || msg.includes('blacklisted')) {
             errEl.textContent = 'Your IP address has been blocked from placing orders.';
@@ -875,21 +1048,24 @@
         }
 
         const p = productMap[selectedProductId] || {};
-        addToCart({
+        addToPreOrdersLocal({
           id: selectedProductId,
           name: selectedProductName,
           image: p.image_url || '',
-          price: p.discount_price || p.price || '',
-          time: new Date().toISOString()
+          price: info.final,
+          original: info.original,
+          percent: info.percent,
+          time: new Date().toISOString(),
+          type: 'preorder'
         });
 
         hideProductCard(selectedProductId);
 
         document.getElementById('preOrderModal').classList.remove('open');
-        alert('Pre-order submitted successfully! Please collect from our shop. We will call you soon.');
+        showSuccess(`Pre-order submitted successfully!\n\nFinal Amount: ₹${info.final}\n\nPlease collect from our shop. We will call you soon.`);
 
       } catch (err) {
-        console.log(err);
+        console.error('Supabase Submission Error:', err);
         errEl.textContent = 'Submission failed. Please try again.';
         errEl.classList.remove('hidden');
       } finally {
@@ -898,7 +1074,7 @@
       }
     });
 
-    // CART DRAWER
+    // ========== CART DRAWER ==========
     const cartDrawer = document.getElementById('cartDrawer');
     const cartOverlay = document.getElementById('cartOverlay');
 
@@ -916,27 +1092,317 @@
     document.getElementById('closeCart').addEventListener('click', closeCart);
     cartOverlay.addEventListener('click', closeCart);
 
+    function getCartOriginalTotal() {
+      return getCart().reduce((sum, i) => sum + (Number(i.price) || 0), 0);
+    }
+
     function renderCart() {
       const cart = getCart();
+      const preOrders = getPreOrders();
       const list = document.getElementById('cartList');
       const empty = document.getElementById('cartEmpty');
-      if (!cart.length) {
+      const footer = document.getElementById('cartFooter');
+      const totalsBox = document.getElementById('cartTotals');
+
+      if (!cart.length && !preOrders.length) {
         list.innerHTML = '';
         empty.classList.remove('hidden');
+        footer.classList.add('hidden');
         return;
       }
       empty.classList.add('hidden');
-      list.innerHTML = cart.map(item => `
-        <div class="flex gap-3 items-center p-3 rounded-xl border border-[#D4AF37]/30 bg-[#FFFDF7]">
-          <img src="${item.image}" class="w-12 h-12 rounded-lg object-cover bg-white border border-[#D4AF37]/20" onerror="this.style.opacity='0.3'" />
-          <div class="flex-1 min-w-0">
-            <p class="text-sm font-semibold text-[#800020] truncate">${item.name}</p>
-            <p class="text-xs text-[#800020] font-medium mt-0.5">${item.price ? '₹' + item.price : ''}</p>
-            <p class="text-xs font-bold text-red-700 mt-1">Please visit our shop to collect</p>
-          </div>
-        </div>
-      `).join('');
+
+      let html = '';
+
+      if (cart.length) {
+        const cartOriginal = getCartOriginalTotal();
+        const cartInfo = calcDiscountInfo(cartOriginal);
+
+        html += `<p class="text-xs font-semibold text-[#800020]/60 uppercase tracking-wide mb-1">Cart Items</p>`;
+        cart.forEach(item => {
+          const itemOriginal = Number(item.price) || 0;
+          const itemFinal = applyDiscount(itemOriginal, cartInfo.percent);
+          html += `
+            <div class="flex gap-3 items-center p-3 rounded-xl border border-[#D4AF37]/30 bg-[#FFFDF7]">
+              <img src="${item.image}" class="w-12 h-12 rounded-lg object-cover bg-white border border-[#D4AF37]/20" onerror="this.style.opacity='0.3'" />
+              <div class="flex-1 min-w-0">
+                <p class="text-sm font-semibold text-[#800020] truncate">${item.name}</p>
+                <div class="flex items-baseline gap-1.5 mt-0.5">
+                  <span class="text-xs font-medium text-[#800020]">₹${itemFinal}</span>
+                  ${cartInfo.percent > 0 ? `<span class="text-[10px] text-[#800020]/40 line-through">₹${itemOriginal}</span>` : ''}
+                </div>
+              </div>
+              <button data-remove="${item.id}" class="text-xs text-red-600 font-medium px-2 py-1 rounded border border-red-200 hover:bg-red-50">Remove</button>
+            </div>
+          `;
+        });
+
+        if (cartInfo.percent > 0) {
+          totalsBox.innerHTML = `
+            <div class="flex justify-between text-[#800020]/70"><span>Original Total</span><span>₹${cartInfo.original}</span></div>
+            <div class="flex justify-between text-emerald-600 font-medium"><span>You Save (${cartInfo.percent}% OFF)</span><span>-₹${cartInfo.saved}</span></div>
+            <div class="flex justify-between font-bold text-[#800020] text-base mt-1"><span>Final Payable</span><span>₹${cartInfo.final}</span></div>
+          `;
+        } else {
+          totalsBox.innerHTML = `
+            <div class="flex justify-between font-bold text-[#800020] text-base"><span>Total</span><span>₹${cartInfo.original}</span></div>
+          `;
+        }
+      }
+
+      if (preOrders.length) {
+        html += `<p class="text-xs font-semibold text-[#800020]/60 uppercase tracking-wide ${cart.length ? 'mt-3' : ''} mb-1">My Orders</p>`;
+        preOrders.forEach(item => {
+          if (item.type === 'cart' && Array.isArray(item.items) && item.items.length) {
+            const itemsList = item.items.map(i => `
+              <div class="flex justify-between text-xs mt-0.5">
+                <span class="text-[#800020]/80 truncate pr-2">${i.name || i.product_name || '—'}</span>
+                <span class="font-medium text-[#800020]">₹${i.price || '—'}</span>
+              </div>
+            `).join('');
+            html += `
+              <div class="p-3 rounded-xl border border-[#D4AF37]/30 bg-[#FFFDF7]">
+                <div class="flex items-center gap-2 mb-1.5">
+                  <span class="text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-indigo-100 text-indigo-700">Cart Order</span>
+                  <span class="text-xs font-bold text-[#800020]">Total ₹${item.total || 0}</span>
+                </div>
+                ${itemsList}
+                <p class="text-xs font-bold text-red-700 mt-2">Please visit our shop to collect</p>
+              </div>
+            `;
+          } else {
+            html += `
+              <div class="flex gap-3 items-center p-3 rounded-xl border border-[#D4AF37]/30 bg-[#FFFDF7]">
+                <img src="${item.image || ''}" class="w-12 h-12 rounded-lg object-cover bg-white border border-[#D4AF37]/20" onerror="this.style.opacity='0.3'" />
+                <div class="flex-1 min-w-0">
+                  <p class="text-sm font-semibold text-[#800020] truncate">${item.name}</p>
+                  <p class="text-xs text-[#800020] font-medium mt-0.5">₹${item.price || ''}</p>
+                  <p class="text-xs font-bold text-red-700 mt-1">Please visit our shop to collect</p>
+                </div>
+              </div>
+            `;
+          }
+        });
+      }
+
+      list.innerHTML = html;
+      footer.classList.toggle('hidden', cart.length === 0);
+
+      list.querySelectorAll('[data-remove]').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const id = btn.getAttribute('data-remove');
+          removeFromCartLocal(id);
+
+          try {
+            if (supabaseClient) {
+              await supabaseClient
+                .from('products')
+                .update({ status: 'available' })
+                .eq('id', id);
+            }
+          } catch (e) {
+            console.warn('Could not restore product status:', e);
+          }
+
+          renderCart();
+        });
+      });
     }
+
+    // ========== CART CHECKOUT ==========
+    document.getElementById('cartCheckoutBtn').addEventListener('click', () => {
+      if (!getCart().length) return;
+      closeCart();
+
+      const cartOriginal = getCartOriginalTotal();
+      const info = calcDiscountInfo(cartOriginal);
+      const box = document.getElementById('ccPriceBreakdown');
+      if (info.percent > 0) {
+        box.innerHTML = `
+          <div class="flex justify-between"><span>Subtotal</span><span>₹${info.original}</span></div>
+          <div class="flex justify-between text-emerald-600 font-medium"><span>Discount (${info.percent}% OFF)</span><span>-₹${info.saved}</span></div>
+          <div class="flex justify-between font-bold text-[#800020] mt-1 pt-1 border-t border-[#D4AF37]/30"><span>Final Total</span><span>₹${info.final}</span></div>
+        `;
+      } else {
+        box.innerHTML = `<div class="flex justify-between font-bold text-[#800020]"><span>Total</span><span>₹${info.original}</span></div>`;
+      }
+
+      document.getElementById('ccName').value = '';
+      document.getElementById('ccPhone').value = '';
+      document.getElementById('ccError').classList.add('hidden');
+      document.getElementById('cartCheckoutModal').classList.add('open');
+    });
+
+    document.getElementById('closeCartCheckout').addEventListener('click', () => {
+      document.getElementById('cartCheckoutModal').classList.remove('open');
+    });
+    document.getElementById('cartCheckoutModal').addEventListener('click', e => {
+      if (e.target === document.getElementById('cartCheckoutModal')) {
+        document.getElementById('cartCheckoutModal').classList.remove('open');
+      }
+    });
+
+    document.getElementById('cartCheckoutForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const customerName = document.getElementById('ccName').value.trim();
+      const phoneNumber = document.getElementById('ccPhone').value.trim();
+      const errEl = document.getElementById('ccError');
+      const btn = document.getElementById('ccSubmitBtn');
+      const cart = getCart();
+
+      if (!cart.length) {
+        errEl.textContent = 'Your cart is empty.';
+        errEl.classList.remove('hidden');
+        return;
+      }
+      if (customerName.length < 3) {
+        errEl.textContent = 'Name must be at least 3 characters';
+        errEl.classList.remove('hidden');
+        return;
+      }
+      if (!/^[6-9]\d{9}$/.test(phoneNumber)) {
+        errEl.textContent = 'Enter a valid 10-digit Indian mobile number';
+        errEl.classList.remove('hidden');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Submitting...';
+      errEl.classList.add('hidden');
+
+      try {
+        let userIp = '0.0.0.0';
+        try {
+          const res = await fetch('https://api.ipify.org?format=json');
+          const data = await res.json();
+          if (data.ip) userIp = data.ip;
+        } catch (e) {
+          console.log('IP fetch failed, using fallback IP');
+        }
+
+        if (!supabaseClient) throw new Error('Service unavailable');
+
+        try {
+          const { data: banned } = await supabaseClient
+            .from('blacklisted_ips')
+            .select('id')
+            .eq('ip_address', userIp)
+            .limit(1);
+          if (banned && banned.length > 0) {
+            errEl.textContent = 'Your request has been blocked. Please contact the shop.';
+            errEl.classList.remove('hidden');
+            return;
+          }
+        } catch (_) {}
+
+        const cartOriginal = getCartOriginalTotal();
+        const info = calcDiscountInfo(cartOriginal);
+
+        const cartItems = cart.map(item => ({
+          product_id: String(item.id),
+          product_name: item.name,
+          price: applyDiscount(item.price, info.percent),
+          original_price: item.price,
+          image: item.image
+        }));
+
+        const firstItem = cart[0];
+
+        // ===== SAFE PAYLOAD – only columns that exist =====
+        const payload = {
+          customer_name: customerName,
+          phone_number: phoneNumber,
+          customer_phone: phoneNumber,
+          product_id: String(firstItem.id || ''),
+          product_name: (firstItem.name || '') + (cart.length > 1 ? ` (+${cart.length - 1} more)` : ''),
+          user_ip: userIp,
+          status: 'pending',
+          order_type: 'cart',
+          items: cartItems,
+          subtotal: info.original,
+          discount_amount: info.saved,
+          final_price: info.final
+        };
+
+        Object.keys(payload).forEach(k => {
+          if (payload[k] === undefined || payload[k] === null) delete payload[k];
+        });
+
+        const { error: insertError } = await supabaseClient
+          .from('pre_orders')
+          .insert([payload]);
+
+        if (insertError) {
+          console.error('Supabase Submission Error:', insertError);
+          const msg = insertError.message || '';
+          if (msg.includes('blocked') || msg.includes('blacklisted')) {
+            errEl.textContent = 'Your IP address has been blocked from placing orders.';
+          } else if (msg.includes('Rate limit') || msg.includes('Maximum 10')) {
+            errEl.textContent = 'Rate limit exceeded: Maximum 10 orders per hour allowed.';
+          } else {
+            errEl.textContent = 'Submission failed. Please try again.';
+          }
+          errEl.classList.remove('hidden');
+          return;
+        }
+
+        for (const item of cart) {
+          try {
+            await supabaseClient
+              .from('products')
+              .update({ status: 'reserved' })
+              .eq('id', item.id);
+          } catch (_) {}
+        }
+
+        addToPreOrdersLocal({
+          id: 'cart_' + Date.now(),
+          type: 'cart',
+          name: firstItem.name + (cart.length > 1 ? ` (+${cart.length - 1} more)` : ''),
+          items: cart.map(i => ({
+            name: i.name,
+            price: applyDiscount(i.price, info.percent),
+            original: i.price,
+            image: i.image,
+            product_id: i.id
+          })),
+          total: info.final,
+          original: info.original,
+          percent: info.percent,
+          time: new Date().toISOString()
+        });
+
+        saveCart([]);
+
+        document.getElementById('cartCheckoutModal').classList.remove('open');
+
+        const itemList = cart.map(i => `• ${i.name} – ₹${applyDiscount(i.price, info.percent)}`).join('\n');
+        showSuccess(`Order placed successfully!\n\n${itemList}\n\nYou saved ₹${info.saved}\nFinal Total: ₹${info.final}\n\nPlease collect from our shop. We will call you soon.`);
+
+      } catch (err) {
+        console.error('Supabase Submission Error:', err);
+        errEl.textContent = 'Submission failed. Please try again.';
+        errEl.classList.remove('hidden');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Confirm Order';
+      }
+    });
+
+    // ========== SUCCESS MODAL ==========
+    function showSuccess(message) {
+      document.getElementById('successMessage').textContent = message;
+      document.getElementById('successModal').classList.add('open');
+    }
+    document.getElementById('closeSuccess').addEventListener('click', () => {
+      document.getElementById('successModal').classList.remove('open');
+    });
+    document.getElementById('successModal').addEventListener('click', e => {
+      if (e.target === document.getElementById('successModal')) {
+        document.getElementById('successModal').classList.remove('open');
+      }
+    });
 
     updateCartBadge();
     document.getElementById('year').textContent = new Date().getFullYear();
